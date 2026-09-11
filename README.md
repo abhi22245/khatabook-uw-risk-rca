@@ -311,7 +311,8 @@ overruling into B and C, not to overruling as such.**
 
 ### 6.4 Inside the 500 — not a few bad loans; it's selection
 
-`Q6` → `data/renewal_overrule_bucket_b_500_loans.csv` (500 rows × 28 cols).
+`Q6` → `data/renewal_overrule_bucket_b_500_loans.csv` (500 rows × 28 cols). **Not in git**
+— see [§7](#7-repo-contents); regenerate it with the command there.
 
 **Concentration — the loss is broad-based.** It takes **79 loans (16%) to reach half the
 ECL**; the top 10 carry only 11.7%. A genuine few-loans problem would have the top 5–10
@@ -375,8 +376,23 @@ xgb_feature_list_combined_features_v5.0.0.csv
 cohort_risk_jul_aug.html          the findings artifact (published, see top of file)
 tools/run_query.py                Snowflake runner (key-pair auth)
 queries/                          every number in §6 comes from these
-data/                             query exports
+data/                             query exports — GITIGNORED, see below
 ```
+
+### `data/` is deliberately not in this repo
+
+Loan-level exports contain real loan IDs, amounts, credit scores, DPD history and
+geography, so `data/` is gitignored and was stripped from git history before this repo
+was pushed. Nothing is lost — anyone with Snowflake access regenerates any export in one
+command:
+
+```bash
+python3 tools/run_query.py queries/Q6_overrule_bucket_b_loan_level.sql \
+    --csv data/renewal_overrule_bucket_b_500_loans.csv
+```
+
+Keep it that way: put new loan-level pulls under `data/`, and never commit credentials or
+the Snowflake RSA key.
 
 ### Query inventory
 
@@ -387,7 +403,7 @@ data/                             query exports
 | `Q3_verify_deployed_ecl_source.sql` | Is the deployed table on `ECL_PORTFOLIO` yet? | §4 warning — **re-run before trusting `uw_decision_monitoring.M0_ECL`** |
 | `Q4_ecl_duplicate_check.sql` | Duplicate rows per loan in the latest BOM | §5 trap 1 |
 | `Q5_cohort_experiment_type_ecl.sql` | `experiment_type` × cohort: loans, ECL, excess ECL | §6.3. Returns **all four cohorts** (150 rows) |
-| `Q6_overrule_bucket_b_loan_level.sql` | The 500 loans, loan by loan | §6.4 + `data/renewal_overrule_bucket_b_500_loans.csv` |
+| `Q6_overrule_bucket_b_loan_level.sql` | The 500 loans, loan by loan | §6.4. Writes `data/renewal_overrule_bucket_b_500_loans.csv` — **gitignored**, regenerate locally |
 
 Two notes on the CSV: `calib_pd` comes back as the string `null` and `risk_bucket_final`
 is JSON-quoted (`"B"`) — artefacts of VARIANT extraction upstream in

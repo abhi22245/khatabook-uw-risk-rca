@@ -1,0 +1,23 @@
+# Borrower-level exports stay OUT of git.
+#
+# Files under data/ are loan-level pulls containing real loan IDs, amounts,
+# credit scores, DPD history and geography. They are regenerated in one command
+# by anyone with Snowflake access — see the query inventory in README.md, e.g.
+#
+#   python3 tools/run_query.py \
+#       queries/Q6_overrule_bucket_b_loan_level.sql \
+#       --csv data/renewal_overrule_bucket_b_500_loans.csv
+#
+# Do not commit them, and never commit credentials or the Snowflake RSA key
+# (~/.snowflake/rsa_key_sf_ds.p8).
+data/
+*.csv
+!xgb_feature_list_combined_features_v5.0.0.csv
+
+.env
+*.p8
+*.pem
+
+.DS_Store
+__pycache__/
+*.pyc
