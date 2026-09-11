@@ -158,6 +158,35 @@ prr
 left join lor d on c.bre_run_id = d.breRunId
 left join (select distinct kb_id from analytics.longterm.lending_dormant_whitelisted_base) e on c.user_id = e.kb_id
 ),
+risk_cte as (
+    SELECT
+        A.LOAN_ID,
+        -- ECL SOURCE = ECL_PORTFOLIO (switched from M0_ECL on 2026-08). Every ECL number
+        -- on the dashboard now derives from LOAN_ECL_METRICS.ECL_PORTFOLIO. It is aliased
+        -- to `m0_ecl` so the ~79 downstream references (data_loader ECL_PCT, _portfolio_ecl_pct,
+        -- metrics, drilldowns) keep working unchanged. NOTE: the column is NAMED m0_ecl/M0_ECL
+        -- downstream but CARRIES ECL_PORTFOLIO values.
+        --
+        -- Supersedes the previous source:
+        --   analytics.MODEL.RISK_M0_MODEL_ECL_PREDICTIONS, FINAL_ECL_PRED * 0.88 AS M0_ECL
+        -- The 0.88 haircut does NOT carry over — ECL_PORTFOLIO is already the final figure.
+        A.ecl_portfolio AS m0_ecl,
+        B.loan_amount,
+        B.model_version,
+        B.loan_type,
+        B.loan_disbursed_date,
+        B.risk_bucket,
+        B.policy_run_date
+    FROM analytics.MODEL.LOAN_ECL_METRICS A
+    JOIN analytics.MODEL.LOAN_ORIGINATION_CHARACTERISTICS B
+        ON A.LOAN_ID = B.LOAN_ID
+    -- Use the latest AVAILABLE BOM snapshot, not the current calendar month.
+    -- (CURRENT_DATE()'s month has no BOM row until the monthly ECL job runs, so on
+    --  the 1st of each month the old `= DATE_TRUNC('MONTH', CURRENT_DATE())` filter
+    --  matched nothing and every M0_ECL came back NULL.)
+    WHERE A.BOM = (SELECT MAX(BOM) FROM analytics.MODEL.LOAN_ECL_METRICS)
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY A.LOAN_ID ORDER BY A.BOM DESC) = 1
+),
 ewi as (
  with all_apps as(
     with
@@ -351,10 +380,19 @@ DATEDIFF(DAY, loan_start_date::DATE, CURRENT_DATE) AS loan_age_days,
 from all_apps
  )
 
- select *
+ select a.*, e.*,
+ -- Carries LOAN_ECL_METRICS.ECL_PORTFOLIO; kept under the m0_ecl name for downstream
+ -- compatibility (see risk_cte header).
+ f.m0_ecl,
+ f.loan_amount,
+ f.loan_type,
+ f.loan_disbursed_date
 
  from
  application_level_data a
  left join
  ewi e on a.bre_run_id = e.bre_run_id_loans
- qualify row_number() over(partition by loan_application_id, policy_run_date, model_version order by updated_at_prr desc) = 1
+ -- risk_cte is keyed on loan_id, which only exists for DISBURSED loans (it arrives via
+ -- ewi). Non-disbursed BRE runs therefore keep m0_ecl = NULL, as intended.
+ left join risk_cte f on e.loan_id = f.loan_id
+ qualify row_number() over(partition by a.loan_application_id, a.policy_run_date, a.model_version order by a.updated_at_prr desc) = 1
