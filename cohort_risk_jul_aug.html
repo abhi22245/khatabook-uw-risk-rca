@@ -201,6 +201,17 @@ tr.total td{
   background:var(--surface-sunk);
   font-weight:500;
 }
+/* two-level header: a column group spanning several measures */
+thead th.grouphead{
+  text-align:left;
+  color:var(--ink-soft);
+  border-bottom:1px solid var(--hairline);
+  padding-bottom:6px;
+  font-size:11px;
+}
+thead th.grouphead-alt,
+th.groupstart, td.groupstart{ border-left:1px solid var(--hairline-strong); }
+thead th.grouphead-alt{ color:var(--ink-muted); }
 .dot{
   display:inline-block;width:8px;height:8px;border-radius:50%;
   margin-right:9px;vertical-align:baseline;
@@ -832,13 +843,22 @@ footer{
   <div class="tablewrap">
     <table>
       <thead>
-        <tr><th>Prior loan max DPD</th><th>Overrule B — loans</th><th>— % of bucket</th><th>— ECL %</th><th>Rest of Renewal — % of group</th><th>— ECL %</th></tr>
+        <tr>
+          <th rowspan="2" style="vertical-align:bottom">Prior loan<br>max DPD</th>
+          <th colspan="3" class="grouphead">Overrule bucket B &nbsp;·&nbsp; 500 loans</th>
+          <th colspan="3" class="grouphead grouphead-alt">Rest of Renewal &nbsp;·&nbsp; 4,810 loans <span style="text-transform:none;letter-spacing:0">(control)</span></th>
+        </tr>
+        <tr>
+          <th>loans</th><th>share of<br>bucket</th><th>ECL %</th>
+          <th class="groupstart">loans</th><th>share of<br>control</th><th>ECL %</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td>0 (clean)</td><td>1</td><td>0.2%</td><td>4.26</td><td>12.4%</td><td>2.63</td></tr>
-        <tr><td>1–3</td><td>229</td><td>45.8%</td><td class="up">5.76</td><td>69.9%</td><td>3.35</td></tr>
-        <tr><td>4–10</td><td>270</td><td class="up">54.0%</td><td class="up">8.62</td><td>17.1%</td><td>5.97</td></tr>
-        <tr><td>11–30</td><td>0</td><td>—</td><td>—</td><td>0.6%</td><td>8.34</td></tr>
+        <tr><td>0 (clean)</td><td>1</td><td>0.2%</td><td>4.26</td><td class="groupstart">596</td><td>12.4%</td><td>2.63</td></tr>
+        <tr><td>1–3</td><td>229</td><td>45.8%</td><td class="up">5.76</td><td class="groupstart">3,364</td><td>69.9%</td><td>3.35</td></tr>
+        <tr><td>4–10</td><td>270</td><td class="up">54.0%</td><td class="up">8.62</td><td class="groupstart">821</td><td>17.1%</td><td>5.97</td></tr>
+        <tr><td>11–30</td><td>0</td><td>—</td><td>—</td><td class="groupstart">28</td><td>0.6%</td><td>8.34</td></tr>
+        <tr class="total"><td>All</td><td>500</td><td>100%</td><td class="up">7.35</td><td class="groupstart">4,810</td><td>100%</td><td>3.75</td></tr>
       </tbody>
     </table>
   </div>
