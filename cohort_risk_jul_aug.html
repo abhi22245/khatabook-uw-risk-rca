@@ -299,7 +299,7 @@ footer{
   <div class="vcell is-critical">
     <div class="vlabel">Deteriorated</div>
     <div class="vname">Renewal</div>
-    <div class="vsub">4.10% ECL — above <b>all six</b> prior months of 2026. Its worst previous month was 3.88%.</div>
+    <div class="vsub">4.10% ECL — above <b>all six</b> prior months of 2026. Nearly a quarter of its loss sits in the risk-bucket B/C overrule family.</div>
   </div>
   <div class="vcell is-warning">
     <div class="vlabel">Watch</div>
@@ -554,12 +554,193 @@ footer{
 </section>
 
 <section>
+  <h2>Inside Renewal: where the loss sits</h2>
+  <p class="sec-note">
+    Renewal's 5,310 loans ran through 33 distinct experiment types. Ranking them by ECL in rupees
+    just ranks them by size, so the measure below is <b>excess ECL</b> — rupees of loss above what
+    each experiment would have carried at Renewal's own 4.10% rate. Positive bars add loss to the
+    cohort; negative bars absorb it.
+  </p>
+
+  <figure>
+    <div class="chartscroll">
+    <svg viewBox="0 0 830 412" width="830" role="img"
+         aria-label="Diverging bar chart of excess ECL in rupees crore by experiment type within the Renewal cohort. POLICY RULES OVERRULE RISK BUCKET B POLICY adds 0.342 crore, more than five times the next largest contributor. NORMAL LOAN absorbs 0.270 crore.">
+
+      <g stroke="var(--hairline)" stroke-width="1">
+        <line x1="300.2" y1="44" x2="300.2" y2="362"/>
+        <line x1="366.8" y1="44" x2="366.8" y2="362"/>
+        <line x1="433.4" y1="44" x2="433.4" y2="362"/>
+        <line x1="566.6" y1="44" x2="566.6" y2="362"/>
+        <line x1="633.2" y1="44" x2="633.2" y2="362"/>
+        <line x1="699.8" y1="44" x2="699.8" y2="362"/>
+      </g>
+
+      <g font-size="11.5" fill="var(--ink-soft)" text-anchor="end">
+        <text x="285" y="63">POLICY RULES OVERRULE RISK BUCKET B POLICY</text>
+        <text x="285" y="89">5 Lakh ATS Experiment</text>
+        <text x="285" y="115">POLICY RULES OVERRULE RISK BUCKET C POLICY</text>
+        <text x="285" y="141">Tenure Experiment: Risk Bucket B</text>
+        <text x="285" y="167">No Rightsizing Experiment</text>
+        <text x="285" y="193">Renewal Last DPD 11 – 14</text>
+        <text x="285" y="219">OVERRULE ATS 5 Lakh</text>
+        <text x="285" y="245">OVERRULE ATS BAU Tenure 5 Lakh NO ABB/EDI</text>
+        <text x="285" y="271">NEW NON PHYSICALLY SERVICEABLE</text>
+        <text x="285" y="297">NPS plus plus</text>
+        <text x="285" y="323">POLICY RULES OVERRULE POLICY</text>
+        <text x="285" y="349">NORMAL LOAN</text>
+      </g>
+
+      <g fill="var(--critical)">
+        <path class="mark" d="M500,50 L723.8,50 Q727.8,50 727.8,54 L727.8,64 Q727.8,68 723.8,68 L500,68 Z"><title>POLICY RULES OVERRULE RISK BUCKET B POLICY · 500 loans · 7.35% ECL · +0.342 Cr excess</title></path>
+        <path class="mark" d="M500,76 L536.6,76 Q540.6,76 540.6,80 L540.6,90 Q540.6,94 536.6,94 L500,94 Z"><title>5 Lakh ATS Experiment · 44 loans · 7.08% ECL · +0.061 Cr excess</title></path>
+        <path class="mark" d="M500,102 L521.3,102 Q525.3,102 525.3,106 L525.3,116 Q525.3,120 521.3,120 L500,120 Z"><title>POLICY RULES OVERRULE RISK BUCKET C POLICY · 42 loans · 8.62% ECL · +0.038 Cr excess</title></path>
+        <path class="mark" d="M500,128 L520.6,128 Q524.6,128 524.6,132 L524.6,142 Q524.6,146 520.6,146 L500,146 Z"><title>Tenure Experiment: Risk Bucket B · 51 loans · 8.20% ECL · +0.037 Cr excess</title></path>
+        <path class="mark" d="M500,154 L510.7,154 Q514.7,154 514.7,158 L514.7,168 Q514.7,172 510.7,172 L500,172 Z"><title>No Rightsizing Experiment · 187 loans · 4.93% ECL · +0.022 Cr excess</title></path>
+        <path class="mark" d="M500,180 L510.7,180 Q514.7,180 514.7,184 L514.7,194 Q514.7,198 510.7,198 L500,198 Z"><title>Renewal Last DPD 11 – 14 · 30 loans · 8.10% ECL · +0.022 Cr excess</title></path>
+        <path class="mark" d="M500,206 L510.7,206 Q514.7,206 514.7,210 L514.7,220 Q514.7,224 510.7,224 L500,224 Z"><title>OVERRULE ATS 5 Lakh · 20 loans · 6.53% ECL · +0.022 Cr excess</title></path>
+        <path class="mark" d="M500,232 L510.0,232 Q514.0,232 514.0,236 L514.0,246 Q514.0,250 510.0,250 L500,250 Z"><title>OVERRULE ATS BAU Tenure 5 Lakh NO ABB/EDI · 135 loans · 4.45% ECL · +0.021 Cr excess</title></path>
+      </g>
+
+      <g fill="var(--good)">
+        <path class="mark" d="M500,258 L469.4,258 Q465.4,258 465.4,262 L465.4,272 Q465.4,276 469.4,276 L500,276 Z"><title>NEW NON PHYSICALLY SERVICEABLE · 307 loans · 2.52% ECL · −0.052 Cr</title></path>
+        <path class="mark" d="M500,284 L460.0,284 Q456.0,284 456.0,288 L456.0,298 Q456.0,302 460.0,302 L500,302 Z"><title>NPS plus plus · 272 loans · 2.23% ECL · −0.066 Cr</title></path>
+        <path class="mark" d="M500,310 L414.1,310 Q410.1,310 410.1,314 L410.1,324 Q410.1,328 414.1,328 L500,328 Z"><title>POLICY RULES OVERRULE POLICY · 714 loans · 3.19% ECL · −0.135 Cr</title></path>
+        <path class="mark" d="M500,336 L324.2,336 Q320.2,336 320.2,340 L320.2,350 Q320.2,354 324.2,354 L500,354 Z"><title>NORMAL LOAN · 1,695 loans · 3.15% ECL · −0.270 Cr</title></path>
+      </g>
+
+      <g class="svg-mono" font-size="11.5" text-anchor="start">
+        <text x="748" y="63" fill="var(--critical)" font-weight="500">+0.342</text>
+        <text x="748" y="89" fill="var(--critical)">+0.061</text>
+        <text x="748" y="115" fill="var(--critical)">+0.038</text>
+        <text x="748" y="141" fill="var(--critical)">+0.037</text>
+        <text x="748" y="167" fill="var(--critical)">+0.022</text>
+        <text x="748" y="193" fill="var(--critical)">+0.022</text>
+        <text x="748" y="219" fill="var(--critical)">+0.022</text>
+        <text x="748" y="245" fill="var(--critical)">+0.021</text>
+        <text x="748" y="271" fill="var(--good)">−0.052</text>
+        <text x="748" y="297" fill="var(--good)">−0.066</text>
+        <text x="748" y="323" fill="var(--good)">−0.135</text>
+        <text x="748" y="349" fill="var(--good)">−0.270</text>
+      </g>
+
+      <line x1="500" y1="44" x2="500" y2="362" stroke="var(--hairline-strong)" stroke-width="1.5"/>
+      <line x1="300" y1="362" x2="740" y2="362" stroke="var(--hairline-strong)" stroke-width="1"/>
+      <g class="svg-mono" font-size="11" fill="var(--ink-muted)" text-anchor="middle">
+        <text x="300.2" y="380">−0.3</text>
+        <text x="366.8" y="380">−0.2</text>
+        <text x="433.4" y="380">−0.1</text>
+        <text x="500" y="380">0</text>
+        <text x="566.6" y="380">+0.1</text>
+        <text x="633.2" y="380">+0.2</text>
+        <text x="699.8" y="380">+0.3</text>
+      </g>
+      <text x="520" y="400" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Excess ECL vs Renewal's 4.10% baseline, ₹ Cr · top 8 adding, top 4 absorbing, of 33 types</text>
+    </svg>
+    </div>
+    <figcaption>
+      <b>POLICY RULES OVERRULE RISK BUCKET B POLICY</b> carries 9.4% of Renewal's loans but 17.7% of
+      its ECL — ₹0.342 Cr of excess loss, more than five times the next contributor. Meanwhile the
+      plain <b>NORMAL LOAN</b> book, a third of the cohort, runs at 3.15% and absorbs ₹0.270 Cr.
+      The BAU renewal book is not the problem.
+    </figcaption>
+  </figure>
+
+  <p class="sec-note" style="margin-top:26px">
+    The pattern is sharper than any single experiment. Every experiment that overrules policy into
+    <b>risk bucket B or C</b> runs hot, and the bucket-A equivalent does not:
+  </p>
+
+  <div class="tablewrap" style="margin-bottom:26px">
+    <table>
+      <thead>
+        <tr><th>Grouping</th><th>Loans</th><th>% of cohort loans</th><th>ECL ₹ Cr</th><th>% of cohort ECL</th><th>ECL %</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dot c"></span>Risk bucket B/C overrule family</td>
+          <td>706</td><td>13.3</td><td>1.036</td><td class="up">23.7</td><td class="up">7.48</td>
+        </tr>
+        <tr>
+          <td><span class="dot n"></span>NPS POLICY OVERRULE RISK BUCKET A</td>
+          <td>212</td><td>4.0</td><td>0.120</td><td>2.7</td><td>4.22</td>
+        </tr>
+        <tr class="total">
+          <td>Renewal, all experiment types</td>
+          <td>5,310</td><td>100.0</td><td>4.370</td><td>100.0</td><td>4.10</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note">
+    Six experiments make up that family — <span class="svg-mono" style="font-size:12.5px">POLICY RULES
+    OVERRULE RISK BUCKET B / C POLICY</span>, <span class="svg-mono" style="font-size:12.5px">Tenure
+    Experiment: Risk Bucket B / C</span>, <span class="svg-mono" style="font-size:12.5px">NPS Experiment:
+    Risk Bucket B</span> and <span class="svg-mono" style="font-size:12.5px">NPS POLICY OVERRULE RISK
+    BUCKET B</span>. Together they are an eighth of Renewal's loans and nearly a quarter of its loss,
+    at 7.48% against the cohort's 4.10%. The bucket-A overrule sits at 4.22% — essentially at
+    baseline. Whatever is wrong is specific to overruling into B and C, not to overruling as such.
+  </p>
+
+  <h3 style="margin-top:34px">All 33 Renewal experiment types</h3>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Experiment type</th><th>Loans</th><th>ECL ₹ Cr</th><th>ECL %</th><th>Excess ₹ Cr</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>POLICY RULES OVERRULE RISK BUCKET B POLICY</td><td>500</td><td>0.774</td><td class="up">7.35</td><td class="up">+0.342</td></tr>
+        <tr><td>5 Lakh ATS Experiment</td><td>44</td><td>0.145</td><td class="up">7.08</td><td class="up">+0.061</td></tr>
+        <tr><td>POLICY RULES OVERRULE RISK BUCKET C POLICY</td><td>42</td><td>0.072</td><td class="up">8.62</td><td class="up">+0.038</td></tr>
+        <tr><td>Tenure Experiment: Risk Bucket B</td><td>51</td><td>0.075</td><td class="up">8.20</td><td class="up">+0.037</td></tr>
+        <tr><td>No Rightsizing Experiment</td><td>187</td><td>0.130</td><td>4.93</td><td>+0.022</td></tr>
+        <tr><td>Renewal Last DPD 11 – 14</td><td>30</td><td>0.045</td><td class="up">8.10</td><td>+0.022</td></tr>
+        <tr><td>OVERRULE ATS 5 Lakh</td><td>20</td><td>0.059</td><td class="up">6.53</td><td>+0.022</td></tr>
+        <tr><td>OVERRULE ATS BAU Tenure 5 Lakh NO ABB/EDI Experiment</td><td>135</td><td>0.265</td><td>4.45</td><td>+0.021</td></tr>
+        <tr><td>NPS Experiment: Risk Bucket B</td><td>47</td><td>0.046</td><td class="up">6.98</td><td>+0.019</td></tr>
+        <tr><td>NPS POLICY OVERRULE RISK BUCKET B</td><td>55</td><td>0.050</td><td class="up">6.52</td><td>+0.018</td></tr>
+        <tr><td>Tenure Experiment: Risk Bucket C</td><td>11</td><td>0.019</td><td class="up">12.95</td><td>+0.013</td></tr>
+        <tr><td>OVERRULE ATS BAU Tenure 5 Lakh</td><td>31</td><td>0.066</td><td>4.77</td><td>+0.009</td></tr>
+        <tr><td>NPS ATS 3 Lakh - A</td><td>81</td><td>0.083</td><td>4.24</td><td>+0.003</td></tr>
+        <tr><td>NPS POLICY OVERRULE RISK BUCKET A</td><td>212</td><td>0.120</td><td>4.22</td><td>+0.003</td></tr>
+        <tr><td>2 BOUNCE POLICY</td><td>93</td><td>0.076</td><td>4.15</td><td>+0.001</td></tr>
+        <tr><td>3 BOUNCE POLICY</td><td>32</td><td>0.030</td><td>4.25</td><td>+0.001</td></tr>
+        <tr><td>4 BOUNCE POLICY</td><td>21</td><td>0.018</td><td>4.38</td><td>+0.001</td></tr>
+        <tr><td>Relaxed Loan Amount/Tenure Cap : BAU C Bucket</td><td>12</td><td>0.005</td><td>3.80</td><td>0.000</td></tr>
+        <tr><td>NPS C Bucket</td><td>3</td><td>0.001</td><td>3.58</td><td>0.000</td></tr>
+        <tr><td>NPS ATS 3 Lakh</td><td>22</td><td>0.021</td><td>4.20</td><td>0.000</td></tr>
+        <tr><td>MCA 50K Tenure Experiment: Risk Bucket C</td><td>1</td><td>0.000</td><td>2.82</td><td>0.000</td></tr>
+        <tr><td>Model D/E Reject Renewal</td><td>38</td><td>0.011</td><td>3.45</td><td>−0.002</td></tr>
+        <tr><td>DBR 70%</td><td>33</td><td>0.010</td><td>2.64</td><td>−0.005</td></tr>
+        <tr><td>5 Lakh ATS BAU Tenure Relaxed ABB/EDI Experiment</td><td>75</td><td>0.127</td><td>3.85</td><td>−0.008</td></tr>
+        <tr><td>5 Lakh ATS 15M Tenure A/B Experiment</td><td>28</td><td>0.032</td><td>2.84</td><td>−0.014</td></tr>
+        <tr><td>5 Lakh ATS BAU Tenure Experiment</td><td>47</td><td>0.065</td><td>3.29</td><td>−0.016</td></tr>
+        <tr><td>1 BOUNCE POLICY</td><td>211</td><td>0.139</td><td>3.67</td><td>−0.016</td></tr>
+        <tr><td>5 Lakh ATS BAU Tenure NO ABB/EDI Experiment</td><td>192</td><td>0.320</td><td>3.85</td><td>−0.021</td></tr>
+        <tr><td>NPS ATS 3 Lakh : 12M Tenure</td><td>68</td><td>0.043</td><td>2.49</td><td>−0.028</td></tr>
+        <tr><td>NEW NON PHYSICALLY SERVICEABLE</td><td>307</td><td>0.083</td><td>2.52</td><td>−0.052</td></tr>
+        <tr><td>NPS plus plus</td><td>272</td><td>0.079</td><td>2.23</td><td>−0.066</td></tr>
+        <tr><td>POLICY RULES OVERRULE POLICY</td><td>714</td><td>0.471</td><td>3.19</td><td>−0.135</td></tr>
+        <tr><td>NORMAL LOAN</td><td>1,695</td><td>0.890</td><td>3.15</td><td>−0.270</td></tr>
+        <tr class="total"><td>Renewal, all types</td><td>5,310</td><td>4.370</td><td>4.10</td><td>0.000</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note" style="margin-top:14px">
+    Fresh, Dormant and AA are computed by the same query (Q5) and are available on request — they
+    are held back here so the Renewal read stays uncluttered.
+  </p>
+</section>
+
+<section>
   <h2>Volume moved at the same time</h2>
   <p class="sec-note">
     The window ran at 427 disbursals a day against June's 333 — a 28% lift in run rate — with every
     cohort growing. Renewal's monthly count went 3,138 → 4,174 and Dormant's 1,919 → 2,695, both
-    roughly +37% into July. Whether the ECL move is a mix effect from that surge or a genuine
-    quality change is the natural next question; this page does not yet separate them.
+    roughly +37% into July. The experiment split above points at mix rather than broad decay —
+    Renewal's BAU book runs at 3.15% while a thirteenth of its loans carry a quarter of its loss —
+    but this page has not yet shown whether that B/C overrule family <em>grew</em> in July or was
+    simply always this lossy. That is the next thing to measure.
   </p>
 </section>
 
@@ -619,10 +800,10 @@ footer{
 <section>
   <h2>Verify it yourself</h2>
   <p class="qlead">
-    Every number above comes from these four queries, unmodified. They are also committed to the
+    Every number above comes from these five queries, unmodified. They are also committed to the
     repo under <code>queries/</code> on branch <code>abhi_rca</code>. Q1 reproduces the cohort
-    table; Q2 the monthly history behind both charts; Q3 and Q4 are the two data-quality checks
-    called out in the caveats.
+    table; Q2 the monthly history behind the first two charts; Q5 the experiment-type split;
+    Q3 and Q4 are the two data-quality checks called out in the caveats.
   </p>
 
   <details open>
@@ -704,6 +885,57 @@ LEFT JOIN ecl e ON loc.LOAN_ID = e.LOAN_ID
 WHERE loc.LOAN_DISBURSED_DATE &gt;= '2026-01-01'
   AND loc.LOAN_DISBURSED_DATE &lt;  '2026-08-11'
 GROUP BY 1,2 ORDER BY 1,2;</pre>
+  </details>
+
+  <details>
+    <summary><span>Q5 — Experiment type × cohort: loans + ECL</span></summary>
+    <pre class="sql">-- Returns ALL cohorts; filter to cohort = 'Renewal' for the tables above.
+-- experiment_type source: loan_origination_characteristics.EXPERIMENT_TYPE.
+-- Verified over this window: agrees with LOAN_ECL_METRICS.EXPERIMENT_TYPE on
+-- all 17,512 loans, zero NULLs, 47 distinct values. Do NOT swap in
+-- EXPERIMENT_TYPE_FINAL — it is a normalised rollup that differs on 5,123
+-- loans (29%), collapsing 'NORMAL LOAN' / '1 BOUNCE POLICY' etc. into 'BAU'.
+WITH ecl AS (
+    SELECT a.LOAN_ID, a.ECL_PORTFOLIO AS m0_ecl
+    FROM analytics.MODEL.LOAN_ECL_METRICS a
+    WHERE a.BOM = (SELECT MAX(BOM) FROM analytics.MODEL.LOAN_ECL_METRICS)
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY a.LOAN_ID ORDER BY a.BOM DESC) = 1
+),
+uw AS (
+    SELECT LOAN_ID, IS_FRESH, IS_RENEWAL, IS_DORMANT_FLAG, COMBINATION_TYPE
+    FROM analytics.model.uw_decision_monitoring
+    WHERE MODEL_VERSION = MODEL_VERSION_FINAL AND LOAN_ID IS NOT NULL
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY LOAN_ID ORDER BY POLICY_RUN_DATE DESC) = 1
+),
+base AS (
+    SELECT loc.LOAN_AMOUNT, loc.EXPERIMENT_TYPE, e.m0_ecl,
+        CASE
+            WHEN uw.LOAN_ID IS NULL         THEN 'Unmapped'
+            WHEN uw.COMBINATION_TYPE = 'AA' THEN 'AA'
+            WHEN uw.IS_DORMANT_FLAG = 1     THEN 'Dormant'
+            WHEN uw.IS_RENEWAL = 1          THEN 'Renewal'
+            ELSE 'Fresh'
+        END AS cohort
+    FROM analytics.model.loan_origination_characteristics loc
+    LEFT JOIN uw  ON loc.LOAN_ID = uw.LOAN_ID
+    LEFT JOIN ecl e ON loc.LOAN_ID = e.LOAN_ID
+    WHERE loc.LOAN_DISBURSED_DATE &gt;= '2026-07-01'
+      AND loc.LOAN_DISBURSED_DATE &lt;  '2026-08-11'
+)
+SELECT
+    cohort,
+    EXPERIMENT_TYPE                  AS experiment_type,
+    COUNT(*)                         AS loans,
+    ROUND(SUM(m0_ecl) / 1e7, 3)      AS ecl_cr,
+    ROUND(SUM(LOAN_AMOUNT) / 1e7, 2) AS disbursed_cr,
+    ROUND(SUM(m0_ecl) * 100.0 / NULLIF(SUM(LOAN_AMOUNT), 0), 2) AS ecl_pct,
+    -- rupees of loss above what this bucket would carry at the cohort rate
+    ROUND((SUM(m0_ecl) - SUM(LOAN_AMOUNT)
+           * (SUM(SUM(m0_ecl))      OVER (PARTITION BY cohort)
+            / SUM(SUM(LOAN_AMOUNT)) OVER (PARTITION BY cohort))) / 1e7, 3) AS excess_ecl_cr
+FROM base
+GROUP BY cohort, EXPERIMENT_TYPE
+ORDER BY cohort, excess_ecl_cr DESC;</pre>
   </details>
 
   <details>
