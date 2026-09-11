@@ -674,8 +674,8 @@ footer{
   </div>
   <p class="sec-note">
     Six experiments make up that family — <span class="svg-mono" style="font-size:12.5px">POLICY RULES
-    OVERRULE RISK BUCKET B / C POLICY</span>, <span class="svg-mono" style="font-size:12.5px">Tenure
-    Experiment: Risk Bucket B / C</span>, <span class="svg-mono" style="font-size:12.5px">NPS Experiment:
+    OVERRULE RISK BUCKET B / C POLICY</span>,&nbsp; <span class="svg-mono" style="font-size:12.5px">Tenure
+    Experiment: Risk Bucket B / C</span>,&nbsp; <span class="svg-mono" style="font-size:12.5px">NPS Experiment:
     Risk Bucket B</span> and <span class="svg-mono" style="font-size:12.5px">NPS POLICY OVERRULE RISK
     BUCKET B</span>. Together they are an eighth of Renewal's loans and nearly a quarter of its loss,
     at 7.48% against the cohort's 4.10%. The bucket-A overrule sits at 4.22% — essentially at
@@ -729,6 +729,127 @@ footer{
   <p class="sec-note" style="margin-top:14px">
     Fresh, Dormant and AA are computed by the same query (Q5) and are available on request — they
     are held back here so the Renewal read stays uncluttered.
+  </p>
+</section>
+
+<section>
+  <h2>Inside the 500: not a few bad loans</h2>
+  <p class="sec-note">
+    The obvious hope is that 7.35% is a handful of blow-ups dragging an otherwise fine book. It
+    isn't. Ranking all 500 loans by ECL, it takes <b>79 loans — 16% of the book — to reach half the
+    loss</b>, and 100 loans to reach 57%. A genuine few-loans problem would have the top 5 or 10
+    carrying most of it; here the top 10 carry 11.7%.
+  </p>
+
+  <figure>
+    <div class="chartscroll">
+    <svg viewBox="0 0 560 400" width="560" role="img"
+         aria-label="Cumulative ECL concentration curve for the 500 loans. The top 10 percent of loans by ECL hold 37.3 percent of the loss, the top 20 percent hold 57.1 percent, and it takes 16 percent of loans to reach half the loss. The curve sits well above the even-distribution diagonal but far below a few-loans concentration.">
+      <g stroke="var(--hairline)" stroke-width="1">
+        <line x1="170" y1="40" x2="170" y2="320"/>
+        <line x1="280" y1="40" x2="280" y2="320"/>
+        <line x1="390" y1="40" x2="390" y2="320"/>
+        <line x1="60" y1="250" x2="500" y2="250"/>
+        <line x1="60" y1="180" x2="500" y2="180"/>
+        <line x1="60" y1="110" x2="500" y2="110"/>
+      </g>
+
+      <line x1="60" y1="320" x2="500" y2="40" stroke="var(--hist)" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="432" y="128" font-size="11" fill="var(--ink-muted)" text-anchor="end">every loan contributes equally</text>
+
+      <polyline points="60,320 104,215.6 148,160.1 192,127.4 236,101.6 280,80.9 324,64.6 368,52.6 412,45.0 456,41.1 500,40"
+                fill="none" stroke="var(--critical)" stroke-width="2.5"
+                stroke-linejoin="round" stroke-linecap="round"/>
+
+      <g fill="var(--critical)" stroke="var(--surface)" stroke-width="2">
+        <circle class="mark" cx="104" cy="215.6" r="5"><title>Top 10% of loans (50) hold 37.3% of ECL</title></circle>
+        <circle class="mark" cx="148" cy="160.1" r="5"><title>Top 20% of loans (100) hold 57.1% of ECL</title></circle>
+        <circle class="mark" cx="280" cy="80.9" r="5"><title>Top 50% of loans (250) hold 85.4% of ECL</title></circle>
+      </g>
+
+      <line x1="130.4" y1="180" x2="130.4" y2="320" stroke="var(--warning)" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <circle cx="130.4" cy="180" r="4.5" fill="var(--warning)" stroke="var(--surface)" stroke-width="2"/>
+      <text x="146" y="176" font-size="11.5" fill="var(--warning)" font-weight="600">79 loans (16%) = half the ECL</text>
+
+      <line x1="60" y1="320" x2="500" y2="320" stroke="var(--hairline-strong)" stroke-width="1"/>
+      <line x1="60" y1="40" x2="60" y2="320" stroke="var(--hairline-strong)" stroke-width="1"/>
+      <g class="svg-mono" font-size="11" fill="var(--ink-muted)" text-anchor="middle">
+        <text x="60" y="338">0</text>
+        <text x="170" y="338">25</text>
+        <text x="280" y="338">50</text>
+        <text x="390" y="338">75</text>
+        <text x="500" y="338">100</text>
+      </g>
+      <g class="svg-mono" font-size="11" fill="var(--ink-muted)" text-anchor="end">
+        <text x="52" y="324">0</text>
+        <text x="52" y="254">25</text>
+        <text x="52" y="184">50</text>
+        <text x="52" y="114">75</text>
+        <text x="52" y="44">100</text>
+      </g>
+      <text x="280" y="358" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">% of loans, ranked by ECL (highest first)</text>
+      <text x="16" y="180" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle" transform="rotate(-90 16 180)">cumulative % of ECL</text>
+      <text x="280" y="382" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Median loan in this bucket sits at 4.74% ECL — already above Renewal's 4.10%</text>
+    </svg>
+    </div>
+    <figcaption>
+      The loss is broad-based. The median loan in the bucket carries 4.74% ECL — above the whole
+      Renewal cohort's 4.10% — and a quarter of the bucket sits above 8.37%. This is a population
+      that is worse throughout, not a tail that got unlucky.
+    </figcaption>
+  </figure>
+
+  <h3 style="margin-top:34px">Why: they are already missing payments at month 1–2</h3>
+  <p class="sec-note">
+    All 500 loans are only 1–2 months on book at the ECL snapshot, yet four in five have already
+    missed a payment and one in five has hit 4+ DPD — several times the rate of any control bucket
+    in the same cohort and the same window.
+  </p>
+  <div class="tablewrap" style="margin-bottom:26px">
+    <table>
+      <thead>
+        <tr><th>Renewal bucket</th><th>Loans</th><th>ECL %</th><th>Ever DPD&gt;0</th><th>Ever 4+ DPD</th><th>Currently DPD</th><th>Avg prior-loan max DPD</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dot c"></span>OVERRULE RISK BUCKET B</td>
+          <td>500</td><td class="up">7.35</td><td class="up">80.4%</td><td class="up">20.0%</td><td class="up">31.8%</td><td class="up">4.05</td>
+        </tr>
+        <tr><td><span class="dot n"></span>NORMAL LOAN</td><td>1,695</td><td>3.15</td><td>50.5%</td><td>5.1%</td><td>9.1%</td><td>1.90</td></tr>
+        <tr><td><span class="dot n"></span>OVERRULE POLICY</td><td>714</td><td>3.19</td><td>59.4%</td><td>8.8%</td><td>16.1%</td><td>2.30</td></tr>
+        <tr><td><span class="dot n"></span>All other Renewal</td><td>2,401</td><td>4.22</td><td>58.6%</td><td>7.3%</td><td>14.2%</td><td>2.26</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>And they were selected that way</h3>
+  <p class="sec-note">
+    The last column above is the tell: these borrowers arrived with roughly double the prior-loan
+    delinquency of the rest of Renewal. Splitting by the previous loan's max-ever DPD shows the
+    bucket is drawn almost entirely from the 4–10 DPD band that the rest of the cohort barely
+    touches — and that it still underperforms <em>within</em> every band.
+  </p>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Prior loan max DPD</th><th>Overrule B — loans</th><th>— % of bucket</th><th>— ECL %</th><th>Rest of Renewal — % of group</th><th>— ECL %</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0 (clean)</td><td>1</td><td>0.2%</td><td>4.26</td><td>12.4%</td><td>2.63</td></tr>
+        <tr><td>1–3</td><td>229</td><td>45.8%</td><td class="up">5.76</td><td>69.9%</td><td>3.35</td></tr>
+        <tr><td>4–10</td><td>270</td><td class="up">54.0%</td><td class="up">8.62</td><td>17.1%</td><td>5.97</td></tr>
+        <tr><td>11–30</td><td>0</td><td>—</td><td>—</td><td>0.6%</td><td>8.34</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note" style="margin-top:16px">
+    Two separate things are wrong, and they compound. <b>Mix:</b> 54% of this bucket comes from the
+    4–10 prior-DPD band against 17% for the rest of Renewal, and almost none of it is clean-history
+    (1 loan out of 500, versus 12.4%). <b>Performance within band:</b> even holding prior DPD fixed,
+    these loans run 1.4–1.7× worse — 5.76% vs 3.35% in the 1–3 band, 8.62% vs 5.97% in the 4–10
+    band. So this cannot be written off as "we knowingly took 4–10 DPD borrowers and got the loss we
+    priced for". Something beyond prior DPD is being given up when this policy is overruled. The
+    11–30 band is correctly blocked — the leak is entirely in 4–10.
   </p>
 </section>
 
@@ -800,10 +921,12 @@ footer{
 <section>
   <h2>Verify it yourself</h2>
   <p class="qlead">
-    Every number above comes from these five queries, unmodified. They are also committed to the
-    repo under <code>queries/</code> on branch <code>abhi_rca</code>. Q1 reproduces the cohort
-    table; Q2 the monthly history behind the first two charts; Q5 the experiment-type split;
-    Q3 and Q4 are the two data-quality checks called out in the caveats.
+    Every number above comes from these queries, unmodified. They are committed to the repo under
+    <code>queries/</code> on branch <code>abhi_rca</code>. Q1 reproduces the cohort table; Q2 the
+    monthly history behind the first two charts; Q5 the experiment-type split; Q6 the loan-level
+    detail behind the concentration curve, also exported to
+    <code>data/renewal_overrule_bucket_b_500_loans.csv</code>; Q3 and Q4 are the two data-quality
+    checks called out in the caveats.
   </p>
 
   <details open>
