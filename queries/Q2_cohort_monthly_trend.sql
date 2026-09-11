@@ -1,0 +1,26 @@
+WITH ecl AS (
+    SELECT a.LOAN_ID, a.ECL_PORTFOLIO AS m0_ecl
+    FROM analytics.MODEL.LOAN_ECL_METRICS a
+    WHERE a.BOM = (SELECT MAX(BOM) FROM analytics.MODEL.LOAN_ECL_METRICS)
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY a.LOAN_ID ORDER BY a.BOM DESC) = 1
+),
+uw AS (
+    SELECT LOAN_ID, IS_RENEWAL, IS_DORMANT_FLAG, COMBINATION_TYPE
+    FROM analytics.model.uw_decision_monitoring
+    WHERE MODEL_VERSION = MODEL_VERSION_FINAL AND LOAN_ID IS NOT NULL
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY LOAN_ID ORDER BY POLICY_RUN_DATE DESC) = 1
+)
+SELECT DATE_TRUNC('month', loc.LOAN_DISBURSED_DATE)::DATE AS disb_month,
+       CASE WHEN uw.LOAN_ID IS NULL THEN 'Unmapped'
+            WHEN uw.COMBINATION_TYPE = 'AA' THEN 'AA'
+            WHEN uw.IS_DORMANT_FLAG = 1 THEN 'Dormant'
+            WHEN uw.IS_RENEWAL = 1 THEN 'Renewal'
+            ELSE 'Fresh' END AS cohort,
+       COUNT(*) AS loans,
+       ROUND(SUM(loc.LOAN_AMOUNT)/1e7,2) AS disbursed_cr,
+       ROUND(SUM(e.m0_ecl)*100.0/NULLIF(SUM(CASE WHEN e.m0_ecl IS NOT NULL THEN loc.LOAN_AMOUNT END),0),2) AS ecl_pct
+FROM analytics.model.loan_origination_characteristics loc
+LEFT JOIN uw ON loc.LOAN_ID = uw.LOAN_ID
+LEFT JOIN ecl e ON loc.LOAN_ID = e.LOAN_ID
+WHERE loc.LOAN_DISBURSED_DATE >= '2026-01-01' AND loc.LOAN_DISBURSED_DATE < '2026-08-11'
+GROUP BY 1,2 ORDER BY 1,2
