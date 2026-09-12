@@ -314,20 +314,30 @@ overruling into B and C, not to overruling as such.**
 `Q6` → `data/renewal_overrule_bucket_b_500_loans.csv` (500 rows × 28 cols). **Not in git**
 — see [§7](#7-repo-contents); regenerate it with the command there.
 
-**Concentration — the loss is broad-based.** It takes **79 loans (16%) to reach half the
-ECL**; the top 10 carry only 11.7%. A genuine few-loans problem would have the top 5–10
-carrying most of it.
+**Concentration — the loss is broad-based, and the control proves it.**
 
-| Top N | % of book | % of ECL |
-|---|---|---|
-| 5 | 1% | 7.3 |
-| 10 | 2% | 11.7 |
-| 50 | 10% | 37.3 |
-| 100 | 20% | 57.1 |
-| 250 | 50% | 85.4 |
+⚠️ **Methodological note.** The first version of this compared the 500 against a
+*perfectly-even* loss distribution. That is the wrong benchmark — every credit book is
+skewed (ECL scales with both loan size and risk), so no real portfolio sits near it, and
+"16% of loans hold half the loss" means nothing on its own. The right benchmark is a
+**healthy bucket in the same cohort and window**. Corrected 2026-09-12.
+
+| Renewal bucket | Loans | ECL % | Worst 2% hold | Worst 10% hold | Half the loss in | Gini |
+|---|---|---|---|---|---|---|
+| NORMAL LOAN | 1,695 | 3.15 | 24.0% | 48.8% | 11% of loans | 0.652 |
+| OVERRULE POLICY | 714 | 3.19 | 18.6% | 44.3% | 13% of loans | 0.594 |
+| **OVERRULE RISK BUCKET B** | 500 | **7.35** | 11.7% | 37.3% | 16% of loans | **0.533** |
+| *if every loan lost the same* | — | — | 2.0% | 10.0% | 50% of loans | 0.000 |
+
+**Concentration runs opposite to loss rate.** The two healthy buckets sit at ~3.2% ECL
+with *high* concentration — a small bad tail on a clean book, which is what a working
+credit policy looks like. The overrule bucket has more than double the loss rate and the
+**lowest** concentration of the three. There is no tail to remove; the book is worse all
+the way through.
 
 Loan-level ECL %: median **4.74** (already above Renewal's 4.10), p75 8.37, p90 15.12,
-p99 45.42, max 67.91.
+p99 45.42, max 67.91. The *median* loan being above the cohort average is the clinching
+number — in a few-blow-ups book the median looks fine and only the tail is ugly.
 
 **They are already failing at MOB 1–2.** All 500 loans are 1–2 months on book at the
 snapshot:
@@ -404,6 +414,7 @@ the Snowflake RSA key.
 | `Q4_ecl_duplicate_check.sql` | Duplicate rows per loan in the latest BOM | §5 trap 1 |
 | `Q5_cohort_experiment_type_ecl.sql` | `experiment_type` × cohort: loans, ECL, excess ECL | §6.3. Returns **all four cohorts** (150 rows) |
 | `Q6_overrule_bucket_b_loan_level.sql` | The 500 loans, loan by loan | §6.4. Writes `data/renewal_overrule_bucket_b_500_loans.csv` — **gitignored**, regenerate locally |
+| `Q7_concentration_vs_control.sql` | Loan-level ECL for the 500 + two healthy control buckets | §6.4 concentration table. Compute the curve / Gini downstream |
 
 Two notes on the CSV: `calib_pd` comes back as the string `null` and `risk_bucket_final`
 is JSON-quoted (`"B"`) — artefacts of VARIANT extraction upstream in

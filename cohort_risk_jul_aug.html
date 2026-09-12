@@ -747,9 +747,9 @@ footer{
   <h2>Inside the 500: not a few bad loans</h2>
   <p class="sec-note">
     The obvious hope is that 7.35% is a handful of blow-ups dragging an otherwise fine book. It
-    isn't. Ranking all 500 loans by ECL, it takes <b>79 loans — 16% of the book — to reach half the
-    loss</b>, and 100 loans to reach 57%. A genuine few-loans problem would have the top 5 or 10
-    carrying most of it; here the top 10 carry 11.7%.
+    isn't — and the proof is not the theoretical even-loss line, which no real credit book sits on,
+    but the healthy book beside it. Both curves below rank a bucket's loans worst-first and plot the
+    running share of its loss. <b>The lossy bucket is the <em>flatter</em> of the two.</b>
   </p>
 
   <figure>
@@ -765,22 +765,25 @@ footer{
         <line x1="60" y1="110" x2="500" y2="110"/>
       </g>
 
-      <line x1="60" y1="320" x2="500" y2="40" stroke="var(--hist)" stroke-width="2" stroke-dasharray="5 4"/>
-      <text x="432" y="128" font-size="11" fill="var(--ink-muted)" text-anchor="end">every loan contributes equally</text>
+      <line x1="60" y1="320" x2="500" y2="40" stroke="var(--hairline-strong)" stroke-width="1.5" stroke-dasharray="4 5"/>
+      <text x="486" y="70" font-size="10.5" fill="var(--ink-muted)" text-anchor="end">if every loan lost the same</text>
 
+      <!-- control: NORMAL LOAN, the healthy 3.15% book -->
+      <polyline points="60,320 104,183.4 148,134.4 192,100.8 236,77.5 280,61.6 324,52.0 368,46.2 412,42.2 456,40.3 500,40"
+                fill="none" stroke="var(--good)" stroke-width="2.5"
+                stroke-linejoin="round" stroke-linecap="round"/>
+      <circle class="mark" cx="104" cy="183.4" r="5" fill="var(--good)" stroke="var(--surface)" stroke-width="2"><title>NORMAL LOAN · top 10% of loans hold 48.8% of ECL</title></circle>
+      <text x="112" y="172" font-size="11.5" fill="var(--good)" font-weight="600">NORMAL LOAN · 3.15% ECL</text>
+      <text x="112" y="186" font-size="10.5" fill="var(--ink-muted)">healthy book — loss really is a few loans</text>
+
+      <!-- the 500 -->
       <polyline points="60,320 104,215.6 148,160.1 192,127.4 236,101.6 280,80.9 324,64.6 368,52.6 412,45.0 456,41.1 500,40"
                 fill="none" stroke="var(--critical)" stroke-width="2.5"
                 stroke-linejoin="round" stroke-linecap="round"/>
-
-      <g fill="var(--critical)" stroke="var(--surface)" stroke-width="2">
-        <circle class="mark" cx="104" cy="215.6" r="5"><title>Top 10% of loans (50) hold 37.3% of ECL</title></circle>
-        <circle class="mark" cx="148" cy="160.1" r="5"><title>Top 20% of loans (100) hold 57.1% of ECL</title></circle>
-        <circle class="mark" cx="280" cy="80.9" r="5"><title>Top 50% of loans (250) hold 85.4% of ECL</title></circle>
-      </g>
-
-      <line x1="130.4" y1="180" x2="130.4" y2="320" stroke="var(--warning)" stroke-width="1.5" stroke-dasharray="3 3"/>
-      <circle cx="130.4" cy="180" r="4.5" fill="var(--warning)" stroke="var(--surface)" stroke-width="2"/>
-      <text x="146" y="176" font-size="11.5" fill="var(--warning)" font-weight="600">79 loans (16%) = half the ECL</text>
+      <circle class="mark" cx="104" cy="215.6" r="5" fill="var(--critical)" stroke="var(--surface)" stroke-width="2"><title>Overrule bucket B · top 10% of loans hold 37.3% of ECL</title></circle>
+      <circle class="mark" cx="148" cy="160.1" r="5" fill="var(--critical)" stroke="var(--surface)" stroke-width="2"><title>Overrule bucket B · top 20% of loans hold 57.1% of ECL</title></circle>
+      <text x="160" y="228" font-size="11.5" fill="var(--critical)" font-weight="600">Overrule bucket B · 7.35% ECL</text>
+      <text x="160" y="242" font-size="10.5" fill="var(--ink-muted)">lossy book — loss is spread across the population</text>
 
       <line x1="60" y1="320" x2="500" y2="320" stroke="var(--hairline-strong)" stroke-width="1"/>
       <line x1="60" y1="40" x2="60" y2="320" stroke="var(--hairline-strong)" stroke-width="1"/>
@@ -800,15 +803,38 @@ footer{
       </g>
       <text x="280" y="358" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">% of loans, ranked by ECL (highest first)</text>
       <text x="16" y="180" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle" transform="rotate(-90 16 180)">cumulative % of ECL</text>
-      <text x="280" y="382" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Median loan in this bucket sits at 4.74% ECL — already above Renewal's 4.10%</text>
+      <text x="280" y="382" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Loans ranked worst-first · the flatter curve is the more broad-based loss</text>
     </svg>
     </div>
     <figcaption>
-      The loss is broad-based. The median loan in the bucket carries 4.74% ECL — above the whole
-      Renewal cohort's 4.10% — and a quarter of the bucket sits above 8.37%. This is a population
-      that is worse throughout, not a tail that got unlucky.
+      The healthy bucket is the <em>more</em> concentrated one: in <b>NORMAL LOAN</b> the worst 10%
+      of loans carry 48.8% of the loss, and half the loss sits in just 11% of loans. In the overrule
+      bucket the worst 10% carry only 37.3%, and it takes 16% of loans to reach half. Its loss is
+      spread more evenly because the whole population is worse — the median loan already sits at
+      4.74% ECL, above the entire Renewal cohort's 4.10%.
     </figcaption>
   </figure>
+
+  <div class="tablewrap" style="margin-top:22px">
+    <table>
+      <thead>
+        <tr><th>Renewal bucket</th><th>Loans</th><th>ECL %</th><th>Worst 2%<br>hold</th><th>Worst 10%<br>hold</th><th>Half the loss<br>sits in</th><th>Gini</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="dot g"></span>NORMAL LOAN</td><td>1,695</td><td>3.15</td><td>24.0%</td><td>48.8%</td><td>11% of loans</td><td>0.652</td></tr>
+        <tr><td><span class="dot n"></span>OVERRULE POLICY</td><td>714</td><td>3.19</td><td>18.6%</td><td>44.3%</td><td>13% of loans</td><td>0.594</td></tr>
+        <tr><td><span class="dot c"></span>OVERRULE RISK BUCKET B</td><td>500</td><td class="up">7.35</td><td>11.7%</td><td>37.3%</td><td>16% of loans</td><td>0.533</td></tr>
+        <tr class="total"><td>if every loan lost the same</td><td>—</td><td>—</td><td>2.0%</td><td>10.0%</td><td>50% of loans</td><td>0.000</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note" style="margin-top:16px">
+    Concentration runs <em>opposite</em> to loss rate here, and that is the point. The two healthy
+    buckets both sit at ~3.2% ECL with high concentration — a small tail of bad loans on top of a
+    clean book, which is what a working credit policy looks like. The overrule bucket has more than
+    double the loss rate and the <em>lowest</em> concentration of the three. You cannot fix it by
+    removing a tail, because there is no tail to remove: the book is worse all the way through.
+  </p>
 
   <h3 style="margin-top:34px">Why: they are already missing payments at month 1–2</h3>
   <p class="sec-note">
