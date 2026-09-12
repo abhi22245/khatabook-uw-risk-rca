@@ -371,6 +371,37 @@ So this **cannot** be written off as "we knowingly took 4–10 DPD borrowers and
 it". Something beyond prior DPD is being given up when this policy is overruled. The
 11–30 band is correctly blocked — the leak is entirely in **4–10**.
 
+### 6.5 Lender split inside the 500 — it's the policy, not a lender
+
+`Q8`. Volume is concentrated: **VIVRITI 203 loans (40.6%)** and **Western Capital 158
+(31.6%)** are 72.2% of the bucket. Loss is not — their loss share is 73.1%, i.e. exactly
+proportional to volume.
+
+Each lender is measured **against itself**: the same lender's Renewal loans, same window,
+that went through any *other* experiment. That separates "risky lender" from "this policy
+is bad at this lender".
+
+| Lender | Loans | % of 500 | ECL % | Control loans | Control ECL % | Lift pp |
+|---|---|---|---|---|---|---|
+| VIVRITI | 203 | 40.6 | 7.27 | 1,313 | 3.06 | **+4.21** |
+| Western Capital | 158 | 31.6 | 7.53 | 537 | 5.40 | +2.13 |
+| SMICC | 44 | 8.8 | 6.17 | 756 | 2.85 | +3.32 |
+| CAPRION | 28 | 5.6 | 8.14 | 630 | 5.80 | +2.35 |
+| JUPITER | 26 | 5.2 | 8.42 | 493 | 3.40 | **+5.02** |
+| SLICE | 23 | 4.6 | 5.51 | 832 | 2.96 | +2.55 |
+| CASHTREE | 17 | 3.4 | 9.67 | 143 | 5.98 | +3.69 |
+| NIYOGIN_APOLLO | 1 | 0.2 | 0.34 | 11 | 3.61 | −3.27 *(1 loan, ignore)* |
+| **All** | **500** | **100** | **7.35** | **4,810** | **3.75** | **+3.60** |
+
+**Every lender is worse inside the experiment**, by +2.13 to +5.02 pp. Lenders do carry
+different baseline risk (SMICC 2.85% vs CASHTREE 5.98% on their other Renewal loans), and
+the experiment adds loss on top of *all* of them.
+
+Measured as excess against the bucket's own 7.35%, the largest single-lender contribution
+is **₹0.009 Cr** — noise. **No lender is dragging this bucket**, and routing away from one
+would not fix it: the policy produces the same bad book wherever it is sent. This is
+consistent with §6.4 — broad-based, not concentrated.
+
 ---
 
 ## 7. Repo contents
@@ -415,6 +446,7 @@ the Snowflake RSA key.
 | `Q5_cohort_experiment_type_ecl.sql` | `experiment_type` × cohort: loans, ECL, excess ECL | §6.3. Returns **all four cohorts** (150 rows) |
 | `Q6_overrule_bucket_b_loan_level.sql` | The 500 loans, loan by loan | §6.4. Writes `data/renewal_overrule_bucket_b_500_loans.csv` — **gitignored**, regenerate locally |
 | `Q7_concentration_vs_control.sql` | Loan-level ECL for the 500 + two healthy control buckets | §6.4 concentration table. Compute the curve / Gini downstream |
+| `Q8_overrule_bucket_b_by_lender.sql` | Lender split of the 500, each lender vs its own other-experiment baseline | §6.5 |
 
 Two notes on the CSV: `calib_pd` comes back as the string `null` and `risk_bucket_final`
 is JSON-quoted (`"B"`) — artefacts of VARIANT extraction upstream in
@@ -436,10 +468,9 @@ is JSON-quoted (`"B"`) — artefacts of VARIANT extraction upstream in
 
 Named by the user for upcoming sessions:
 
-1. **Lender split within an experiment** — which lenders approved the most loans in
-   `POLICY RULES OVERRULE RISK BUCKET B POLICY`, and do their ECL rates differ? The CSV
-   already carries `lender`; `Western Capital` and `VIVRITI` dominate by eye but this is
-   **not yet measured**.
+1. ~~**Lender split within an experiment**~~ — **done, §6.5.** VIVRITI + Western Capital are
+   72.2% of the 500, but loss tracks volume and *every* lender is +2.13 to +5.02 pp worse
+   inside the experiment. It is the policy, not a lender.
 2. **Experiment types in the other cohorts** — `Q5` already returns Fresh, Dormant and AA
    (150 rows total); only Renewal has been read. Fresh is the largest book and its
    experiment split is unexamined.

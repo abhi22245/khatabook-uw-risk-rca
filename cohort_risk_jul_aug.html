@@ -900,6 +900,154 @@ footer{
 </section>
 
 <section>
+  <h2>Which lender — and does it matter?</h2>
+  <p class="sec-note">
+    Two lenders put through nearly three-quarters of the 500: <b>VIVRITI</b> 203 loans (40.6%)
+    and <b>Western Capital</b> 158 (31.6%). But volume is the less interesting half. A lender
+    showing a high ECL% inside the experiment proves nothing on its own — that lender may run a
+    riskier book everywhere. The test is each lender against <em>itself</em>: the same lender's
+    Renewal loans, same window, that went through any other experiment.
+  </p>
+
+  <figure>
+    <div class="chartscroll">
+    <svg viewBox="0 0 800 342" width="800" role="img"
+         aria-label="Dumbbell chart comparing each lender's ECL percent inside the overrule bucket B experiment against the same lender's other Renewal loans in the same window. Every one of the seven lenders is worse inside the experiment, by between 2.13 and 5.02 percentage points.">
+      <g stroke="var(--hairline)" stroke-width="1">
+        <line x1="292" y1="38" x2="292" y2="284"/>
+        <line x1="394" y1="38" x2="394" y2="284"/>
+        <line x1="496" y1="38" x2="496" y2="284"/>
+        <line x1="598" y1="38" x2="598" y2="284"/>
+        <line x1="700" y1="38" x2="700" y2="284"/>
+      </g>
+
+      <g font-size="12.5" fill="var(--ink-soft)" text-anchor="end">
+        <text x="175" y="59">VIVRITI</text>
+        <text x="175" y="93">Western Capital</text>
+        <text x="175" y="127">SMICC</text>
+        <text x="175" y="161">CAPRION</text>
+        <text x="175" y="195">JUPITER</text>
+        <text x="175" y="229">SLICE</text>
+        <text x="175" y="263">CASHTREE</text>
+      </g>
+      <g class="svg-mono" font-size="10.5" fill="var(--ink-muted)" text-anchor="end">
+        <text x="175" y="71">203 loans</text>
+        <text x="175" y="105">158</text>
+        <text x="175" y="139">44</text>
+        <text x="175" y="173">28</text>
+        <text x="175" y="207">26</text>
+        <text x="175" y="241">23</text>
+        <text x="175" y="275">17</text>
+      </g>
+
+      <!-- connectors -->
+      <g stroke="var(--hairline-strong)" stroke-width="2.5" stroke-linecap="round">
+        <line x1="346.1" y1="55" x2="560.8" y2="55"/>
+        <line x1="465.4" y1="89" x2="574.0" y2="89"/>
+        <line x1="335.4" y1="123" x2="504.7" y2="123"/>
+        <line x1="485.8" y1="157" x2="605.1" y2="157"/>
+        <line x1="363.4" y1="191" x2="619.4" y2="191"/>
+        <line x1="341.0" y1="225" x2="471.0" y2="225"/>
+        <line x1="495.0" y1="259" x2="683.2" y2="259"/>
+      </g>
+
+      <!-- control: same lender, other experiments -->
+      <g fill="var(--surface)" stroke="var(--good)" stroke-width="2.5">
+        <circle class="mark" cx="346.1" cy="55" r="6"><title>VIVRITI · other experiments · 3.06% ECL · 1,313 loans</title></circle>
+        <circle class="mark" cx="465.4" cy="89" r="6"><title>Western Capital · other experiments · 5.40% ECL · 537 loans</title></circle>
+        <circle class="mark" cx="335.4" cy="123" r="6"><title>SMICC · other experiments · 2.85% ECL · 756 loans</title></circle>
+        <circle class="mark" cx="485.8" cy="157" r="6"><title>CAPRION · other experiments · 5.80% ECL · 630 loans</title></circle>
+        <circle class="mark" cx="363.4" cy="191" r="6"><title>JUPITER · other experiments · 3.40% ECL · 493 loans</title></circle>
+        <circle class="mark" cx="341.0" cy="225" r="6"><title>SLICE · other experiments · 2.96% ECL · 832 loans</title></circle>
+        <circle class="mark" cx="495.0" cy="259" r="6"><title>CASHTREE · other experiments · 5.98% ECL · 143 loans</title></circle>
+      </g>
+
+      <!-- inside the experiment -->
+      <g fill="var(--critical)" stroke="var(--surface)" stroke-width="2">
+        <circle class="mark" cx="560.8" cy="55" r="7"><title>VIVRITI · overrule bucket B · 7.27% ECL · 203 loans</title></circle>
+        <circle class="mark" cx="574.0" cy="89" r="7"><title>Western Capital · overrule bucket B · 7.53% ECL · 158 loans</title></circle>
+        <circle class="mark" cx="504.7" cy="123" r="7"><title>SMICC · overrule bucket B · 6.17% ECL · 44 loans</title></circle>
+        <circle class="mark" cx="605.1" cy="157" r="7"><title>CAPRION · overrule bucket B · 8.14% ECL · 28 loans</title></circle>
+        <circle class="mark" cx="619.4" cy="191" r="7"><title>JUPITER · overrule bucket B · 8.42% ECL · 26 loans</title></circle>
+        <circle class="mark" cx="471.0" cy="225" r="7"><title>SLICE · overrule bucket B · 5.51% ECL · 23 loans</title></circle>
+        <circle class="mark" cx="683.2" cy="259" r="7"><title>CASHTREE · overrule bucket B · 9.67% ECL · 17 loans</title></circle>
+      </g>
+
+      <g class="svg-mono" font-size="11.5" fill="var(--critical)" text-anchor="start">
+        <text x="712" y="59">+4.21</text>
+        <text x="712" y="93">+2.13</text>
+        <text x="712" y="127">+3.32</text>
+        <text x="712" y="161">+2.35</text>
+        <text x="712" y="195">+5.02</text>
+        <text x="712" y="229">+2.55</text>
+        <text x="712" y="263">+3.69</text>
+      </g>
+      <text x="712" y="40" font-size="10.5" fill="var(--ink-muted)" text-anchor="start">lift (pp)</text>
+
+      <g font-size="11" text-anchor="middle">
+        <text x="346.1" y="40" fill="var(--good)">other experiments</text>
+        <text x="600" y="40" fill="var(--critical)">inside overrule bucket B</text>
+      </g>
+
+      <line x1="190" y1="284" x2="700" y2="284" stroke="var(--hairline-strong)" stroke-width="1"/>
+      <g class="svg-mono" font-size="11" fill="var(--ink-muted)" text-anchor="middle">
+        <text x="190" y="302">0</text>
+        <text x="292" y="302">2</text>
+        <text x="394" y="302">4</text>
+        <text x="496" y="302">6</text>
+        <text x="598" y="302">8</text>
+        <text x="700" y="302">10</text>
+      </g>
+      <text x="445" y="324" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">ECL as % of disbursed · each lender against itself, same cohort and window</text>
+    </svg>
+    </div>
+    <figcaption>
+      <b>Every lender is worse inside the experiment</b> — all seven, by between +2.13 pp
+      (Western Capital) and +5.02 pp (JUPITER). Lenders do have different baseline risk: SMICC
+      runs 2.85% on its other Renewal loans while CASHTREE runs 5.98%. The experiment adds loss
+      on top of all of them. NIYOGIN_APOLLO is excluded — 1 loan.
+    </figcaption>
+  </figure>
+
+  <div class="tablewrap" style="margin-top:22px">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2" style="vertical-align:bottom">Lender</th>
+          <th colspan="5" class="grouphead">Inside overrule bucket B</th>
+          <th colspan="3" class="grouphead grouphead-alt">Same lender, other experiments <span style="text-transform:none;letter-spacing:0">(control)</span></th>
+          <th rowspan="2" style="vertical-align:bottom">Lift<br>pp</th>
+        </tr>
+        <tr>
+          <th>loans</th><th>% of 500</th><th>disb ₹Cr</th><th>ECL ₹Cr</th><th>ECL %</th>
+          <th class="groupstart">loans</th><th>ECL %</th><th>ever 4+ DPD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>VIVRITI</td><td>203</td><td>40.6%</td><td>4.36</td><td>0.317</td><td class="up">7.27</td><td class="groupstart">1,313</td><td>3.06</td><td>6.5%</td><td class="up">+4.21</td></tr>
+        <tr><td>Western Capital</td><td>158</td><td>31.6%</td><td>3.30</td><td>0.249</td><td class="up">7.53</td><td class="groupstart">537</td><td>5.40</td><td>7.8%</td><td class="up">+2.13</td></tr>
+        <tr><td>SMICC</td><td>44</td><td>8.8%</td><td>0.88</td><td>0.054</td><td class="up">6.17</td><td class="groupstart">756</td><td>2.85</td><td>5.8%</td><td class="up">+3.32</td></tr>
+        <tr><td>CAPRION</td><td>28</td><td>5.6%</td><td>0.61</td><td>0.050</td><td class="up">8.14</td><td class="groupstart">630</td><td>5.80</td><td>9.2%</td><td class="up">+2.35</td></tr>
+        <tr><td>JUPITER</td><td>26</td><td>5.2%</td><td>0.46</td><td>0.039</td><td class="up">8.42</td><td class="groupstart">493</td><td>3.40</td><td>6.1%</td><td class="up">+5.02</td></tr>
+        <tr><td>SLICE</td><td>23</td><td>4.6%</td><td>0.53</td><td>0.029</td><td>5.51</td><td class="groupstart">832</td><td>2.96</td><td>4.1%</td><td class="up">+2.55</td></tr>
+        <tr><td>CASHTREE</td><td>17</td><td>3.4%</td><td>0.37</td><td>0.036</td><td class="up">9.67</td><td class="groupstart">143</td><td>5.98</td><td>18.9%</td><td class="up">+3.69</td></tr>
+        <tr><td>NIYOGIN_APOLLO</td><td>1</td><td>0.2%</td><td>0.01</td><td>0.000</td><td>0.34</td><td class="groupstart">11</td><td>3.61</td><td>0.0%</td><td>−3.27</td></tr>
+        <tr class="total"><td>All</td><td>500</td><td>100%</td><td>10.53</td><td>0.774</td><td class="up">7.35</td><td class="groupstart">4,810</td><td>3.75</td><td>7.3%</td><td class="up">+3.60</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="sec-note" style="margin-top:18px">
+    <b>No lender is dragging this bucket.</b> Loss share tracks volume share almost exactly —
+    VIVRITI and Western Capital are 72.2% of the loans and 73.1% of the loss. Measured as excess
+    against the bucket's own 7.35%, the largest single-lender contribution is ₹0.009 Cr, which is
+    noise. Every lender in the experiment lands between 5.51% and 9.67%, and every one of them is
+    above its own baseline. Routing loans away from one lender would not fix this — the policy
+    produces the same bad book wherever it is sent.
+  </p>
+</section>
+
+<section>
   <h2>Volume moved at the same time</h2>
   <p class="sec-note">
     The window ran at 427 disbursals a day against June's 333 — a 28% lift in run rate — with every
