@@ -28,6 +28,13 @@ number without a query behind it is not deliverable.
 2. Ruled out loan seasoning as the explanation
 3. Split each cohort by `experiment_type` → **one experiment dominates Renewal's loss**
 4. Loan-level drill into that experiment → **not a few bad loans; it's selection**
+5. Lender split of that experiment → **it's the policy, not a lender**
+6. Monthly attribution of the July move → **the experiment did *not* cause it; lender
+   turnover plus a broad unexplained drift did**
+
+> **Read §6.6 before acting on §6.3–6.5.** Those sections identify a genuinely bad experiment,
+> but §6.6 shows it accounts for only ~6% of what changed in July. Both are true; they answer
+> different questions — *where is the loss* vs *what changed*.
 
 Full numbers in [§6](#6-findings-so-far). Open threads in [§8](#8-open-threads--next-steps).
 
@@ -402,6 +409,69 @@ is **₹0.009 Cr** — noise. **No lender is dragging this bucket**, and routing
 would not fix it: the policy produces the same bad book wherever it is sent. This is
 consistent with §6.4 — broad-based, not concentrated.
 
+### 6.6 The overrule bucket did NOT cause the July move — lender turnover did
+
+`Q9`, `Q10`. **This overturns the direction §6.3–6.5 was pointing.** Those sections show the
+bucket is lossy; they never showed it *changed* in July, which is what would make it the
+cause. Tracked monthly back to Apr 2025 (ECL coverage verified 100% every month, so no
+survivorship bias), it doesn't.
+
+**Decomposition of Renewal's +1.11 pp June→July move:**
+
+| Component | pp | Share |
+|---|---|---|
+| New / surged lenders (CAPRION, Western Capital) | **+0.52** | **47%** |
+| Broad drift across continuing lenders | **+0.52** | **47%** |
+| Overrule risk bucket B growing its excess | **+0.07** | **6%** |
+| **Total** | **+1.11** | 100% |
+
+**The bucket is a slow burn, not a July event.** Its share of Renewal fell through 2026 to a
+7.1% low in June and rose to 8.7% in July — but it ran 13–16% through most of 2025, so July
+is unremarkable. What *has* moved is its lift over the rest of the cohort, widening every
+month of 2026:
+
+| Month | Bucket loans | Share of Renewal | Bucket ECL % | Rest ECL % | Lift pp | Contribution pp |
+|---|---|---|---|---|---|---|
+| Aug 2025 | 403 | 15.6% | 5.11 | 4.13 | +0.98 | 0.150 |
+| Nov 2025 | 315 | 12.5% | 5.77 | 3.51 | +2.26 | 0.289 |
+| Feb 2026 | 252 | 9.7% | 5.90 | 3.57 | +2.32 | 0.228 |
+| May 2026 | 231 | 7.7% | 6.32 | 3.58 | +2.74 | 0.223 |
+| Jun 2026 | 224 | 7.1% | 6.02 | 2.78 | +3.24 | 0.266 |
+| Jul 2026 | 365 | 8.7% | 7.33 | 3.82 | **+3.51** | 0.333 |
+| Aug 2026* | 135 | 11.9% | 7.42 | 3.46 | **+3.96** | 0.450 |
+
+`lift_pp` is the seasoning-immune column — both sides share a month, vintage and BOM
+snapshot, so only a real change in relative quality moves it. Compare `ecl_pct` down a
+column only loosely (trap 6). Full series in `Q9`.
+
+**What actually changed: the lender panel turned over.** Non-bucket Renewal, June vs July:
+
+| Lender | Jun loans | Jun ECL % | Jul loans | Jul ECL % | % of Jul book |
+|---|---|---|---|---|---|
+| **CAPRION** | 18 | 5.59 | **499** | **6.20** | 12.2% |
+| **Western Capital** | **0** | — | **296** | **5.77** | 8.5% |
+| VIVRITI | 940 | 2.55 | 1,078 | 3.07 | 27.8% |
+| SLICE | 692 | 2.51 | 644 | 3.15 | 18.4% |
+| SMICC | 624 | 2.82 | 628 | 2.93 | 15.6% |
+| JUPITER | 342 | 3.34 | 435 | 3.41 | 12.8% |
+| CASHTREE | 122 | 3.50 | 143 | 5.98 | 3.7% |
+| LENDBOX | 117 | 2.76 | 83 | 2.42 | 0.9% |
+| **NIYOGIN** *(exited)* | 59 | 4.38 | **0** | — | 0.0% |
+
+- **CAPRION**: 18 → 499 Renewal loans, a 28× jump, at 6.20%.
+- **Western Capital**: **zero** Renewal loans in June, 296 in July at 5.77% plus 75 inside the
+  overrule bucket. A brand-new counterparty, not an expansion — which also means its Q8
+  "control" baseline (§6.5) is its own first six weeks, so read that lift cautiously.
+- **NIYOGIN**: 12 months in the experiment, stopped entirely after June. `NIYOGIN_APOLLO`
+  appears in Aug with 1 loan — likely a re-onboarding, **worth confirming**.
+
+Newcomers wrote **20.8% of July's non-bucket Renewal disbursal at 6.01% ECL, vs 3.24% for
+lenders already there**.
+
+**Still unexplained:** the other ~47%. Every continuing lender drifted up at once — VIVRITI
+2.55→3.07, SLICE 2.51→3.15, CASHTREE 3.50→5.98. A simultaneous drift across unrelated
+counterparties usually points upstream of any single lender or experiment.
+
 ---
 
 ## 7. Repo contents
@@ -447,6 +517,8 @@ the Snowflake RSA key.
 | `Q6_overrule_bucket_b_loan_level.sql` | The 500 loans, loan by loan | §6.4. Writes `data/renewal_overrule_bucket_b_500_loans.csv` — **gitignored**, regenerate locally |
 | `Q7_concentration_vs_control.sql` | Loan-level ECL for the 500 + two healthy control buckets | §6.4 concentration table. Compute the curve / Gini downstream |
 | `Q8_overrule_bucket_b_by_lender.sql` | Lender split of the 500, each lender vs its own other-experiment baseline | §6.5 |
+| `Q9_overrule_bucket_b_monthly.sql` | Bucket share + seasoning-immune lift, monthly Apr 2025 → Aug 2026 | §6.6. **Read `lift_pp`, not `ecl_pct`, across months** |
+| `Q10_overrule_bucket_b_lender_by_month.sql` | Lender entry/exit inside the bucket, with NEW/EXITED/CONTINUING status | §6.6 |
 
 Two notes on the CSV: `calib_pd` comes back as the string `null` and `risk_bucket_final`
 is JSON-quoted (`"B"`) — artefacts of VARIANT extraction upstream in
@@ -479,13 +551,17 @@ Named by the user for upcoming sessions:
 
 Analytically open:
 
-4. **Did the B/C overrule family _grow_ in July, or was it always this lossy?** This is
-   the biggest gap. §6.3 shows the bucket is bad; it does **not** show it got bigger or
-   worse in July. If its share of Renewal was flat all year, July's move is coming from
-   somewhere else and §6.4 is a standing problem rather than the cause. **Run the family's
-   monthly volume and ECL before concluding it caused the July deterioration.**
+4. ~~**Did the B/C overrule family grow in July?**~~ — **answered, §6.6. No.** It contributes
+   ~6% of the move. It is a standing, steadily worsening problem, not the July cause.
+   **The July cause is ~47% new-lender entry and ~47% broad drift across continuing
+   lenders, and that broad drift is now the biggest open question.** A simultaneous rise
+   across unrelated counterparties points upstream — a scoring, policy or population change
+   that hit everyone at once. Start there.
 5. **Why do these loans underperform _within_ prior-DPD band?** (§6.4) Prior DPD does not
    explain the 1.4–1.7× gap. What else does the overruled policy screen on?
+5b. **Confirm the NIYOGIN → NIYOGIN_APOLLO relationship** (§6.6). If it is a re-onboarding
+   of the same counterparty, NIYOGIN's exit is not a true exit and the July lender
+   attribution shifts slightly.
 6. **Dormant** is above five of six prior months and still climbing into August
    (4.57%) — second-order but unexplained.
 7. **Fresh** has had no experiment-type drill at all.
