@@ -1158,6 +1158,87 @@ footer{
     </table>
   </div>
 
+  <h3 style="margin-top:30px">Deriving the +0.5365 (rate) and +0.5041 (entry/exit)</h3>
+  <p class="sec-note">
+    <span class="svg-mono" style="font-size:12.5px">w</span> is a lender's share of disbursal
+    <em>among the six continuing lenders</em>;
+    <span class="svg-mono" style="font-size:12.5px">r</span> is its ECL% that month.
+  </p>
+
+  <h3 style="margin-top:22px;color:var(--critical)">Rate — <span class="svg-mono" style="font-size:12px;letter-spacing:0">Σ w_jun × (r_jul − r_jun)</span></h3>
+  <p class="sec-note">Each lender's own quality change, with June's weights held fixed.</p>
+  <div class="tablewrap" style="margin-bottom:22px">
+    <table>
+      <thead><tr><th>Lender</th><th>w_jun</th><th>r_jun</th><th>r_jul</th><th>change</th><th>contribution</th></tr></thead>
+      <tbody>
+        <tr><td>VIVRITI</td><td class="svg-mono">0.36752</td><td class="svg-mono">3.097</td><td class="svg-mono">3.703</td><td class="svg-mono up">+0.605</td><td class="svg-mono up">+0.2224</td></tr>
+        <tr><td>SLICE</td><td class="svg-mono">0.25653</td><td class="svg-mono">2.589</td><td class="svg-mono">3.192</td><td class="svg-mono up">+0.602</td><td class="svg-mono up">+0.1545</td></tr>
+        <tr><td>SMICC</td><td class="svg-mono">0.20881</td><td class="svg-mono">2.941</td><td class="svg-mono">3.108</td><td class="svg-mono">+0.167</td><td class="svg-mono">+0.0349</td></tr>
+        <tr><td>JUPITER</td><td class="svg-mono">0.11435</td><td class="svg-mono">3.316</td><td class="svg-mono">3.631</td><td class="svg-mono">+0.315</td><td class="svg-mono">+0.0360</td></tr>
+        <tr><td>CASHTREE</td><td class="svg-mono">0.03566</td><td class="svg-mono">3.763</td><td class="svg-mono">6.413</td><td class="svg-mono up">+2.650</td><td class="svg-mono up">+0.0945</td></tr>
+        <tr><td>LENDBOX</td><td class="svg-mono">0.01713</td><td class="svg-mono">2.760</td><td class="svg-mono">2.423</td><td class="svg-mono">−0.336</td><td class="svg-mono">−0.0058</td></tr>
+        <tr class="total"><td>Rate effect</td><td></td><td></td><td></td><td></td><td class="svg-mono up">+0.5365</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note">
+    Five of six got worse. <b>VIVRITI and SLICE supply two-thirds of it</b> (+0.2224 and +0.1545) —
+    both moved about +0.60 pp on large books. CASHTREE moved furthest (+2.65 pp) but is small
+    enough that it only adds +0.0945.
+  </p>
+
+  <h3 style="margin-top:26px;color:var(--warning)">Mix — <span class="svg-mono" style="font-size:12px;letter-spacing:0">Σ (w_jul − w_jun) × r_jul</span></h3>
+  <p class="sec-note">Volume moving between those same six, at July's rates.</p>
+  <div class="tablewrap" style="margin-bottom:22px">
+    <table>
+      <thead><tr><th>Lender</th><th>w_jun</th><th>w_jul</th><th>shift</th><th>r_jul</th><th>contribution</th></tr></thead>
+      <tbody>
+        <tr><td>JUPITER</td><td class="svg-mono">0.11435</td><td class="svg-mono">0.15442</td><td class="svg-mono up">+0.04007</td><td class="svg-mono">3.631</td><td class="svg-mono up">+0.1455</td></tr>
+        <tr><td>CASHTREE</td><td class="svg-mono">0.03566</td><td class="svg-mono">0.04812</td><td class="svg-mono">+0.01246</td><td class="svg-mono">6.413</td><td class="svg-mono">+0.0799</td></tr>
+        <tr><td>VIVRITI</td><td class="svg-mono">0.36752</td><td class="svg-mono">0.37655</td><td class="svg-mono">+0.00903</td><td class="svg-mono">3.703</td><td class="svg-mono">+0.0335</td></tr>
+        <tr><td>LENDBOX</td><td class="svg-mono">0.01713</td><td class="svg-mono">0.00994</td><td class="svg-mono">−0.00719</td><td class="svg-mono">2.423</td><td class="svg-mono">−0.0174</td></tr>
+        <tr><td>SMICC</td><td class="svg-mono">0.20881</td><td class="svg-mono">0.19171</td><td class="svg-mono">−0.01710</td><td class="svg-mono">3.108</td><td class="svg-mono">−0.0532</td></tr>
+        <tr><td>SLICE</td><td class="svg-mono">0.25653</td><td class="svg-mono">0.21925</td><td class="svg-mono">−0.03727</td><td class="svg-mono">3.192</td><td class="svg-mono">−0.1190</td></tr>
+        <tr class="total"><td>Mix effect</td><td></td><td></td><td></td><td></td><td class="svg-mono">+0.0693</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note">
+    Nearly self-cancelling: JUPITER gaining share (+0.1455) is almost exactly offset by SLICE
+    losing it (−0.1190). <b>Reshuffling volume among established lenders is not part of the story.</b>
+  </p>
+
+  <h3 style="margin-top:26px;color:var(--good)">Entry / exit — a dilution, not a leftover</h3>
+  <p class="sec-note">
+    The two effects above are both <em>inside</em> the six continuing lenders, so together they say
+    what that block's own blended rate did. Everything else is the block being diluted.
+  </p>
+  <pre class="sql" style="border:1px solid var(--hairline)">The six continuing lenders, as a block:
+  their own blended rate     June 2.9775%  ->  July 3.5834%     = +0.6058 pp
+  and  +0.6058 = rate +0.5365 + mix +0.0693                     <- the two tables above
+
+  their share of the book    June  97.20%  ->  July  78.48%
+  entrants took 21.52% of July at 6.232%   (CAPRION, Western Capital, NIYOGIN_APOLLO)
+  NIYOGIN held   2.80% of June at 5.261%   and left
+
+Putting both halves together:
+  June total = 0.9720 x 2.9775 + 0.0280 x 5.2612 = 3.0434%
+  July total = 0.7848 x 3.5834 + 0.2152 x 6.2324 = 4.1534%
+  TOTAL MOVE                                     = +1.1100 pp
+
+ENTRY/EXIT = total move - the block's own change
+           = 1.1100 - 0.6058 = +0.5041 pp</pre>
+  <p class="sec-note" style="margin-top:14px">
+    So the +0.5041 is <b>dilution</b>: the continuing block's rate rose only 0.61 pp, but it shrank
+    from 97.2% to 78.5% of the book, and what replaced it ran at <b>6.23% against the block's
+    3.58%</b>. Nearly a fifth of July's Renewal lending was written by lenders who were barely there
+    in June, at almost double the rate of those who were.
+  </p>
+  <p class="sec-note">
+    <span style="color:var(--ink-muted)">Totals shown to 4 dp are computed on unrounded rupee
+    values; reproducing them from the 3-dp rates in these tables drifts by ~0.002 pp.</span>
+  </p>
+
   <h3 style="margin-top:30px">Deriving the +0.0668, from rupees</h3>
   <p class="sec-note">
     The four numbers in <span class="svg-mono" style="font-size:12.5px">0.09491 × 3.508 − 0.08201 ×

@@ -478,6 +478,63 @@ Same total, same conclusion about the established lenders.
 > nearly the same place — old "new lenders" 0.52 vs new entry/exit 0.5041; old "drift" 0.52 vs
 > new rate 0.5365 — but the shift-share is exact, so use it.
 
+**Worked arithmetic — rate effect** (`w` = share of disbursal among the six continuing
+lenders, `r` = that lender's ECL% that month):
+
+| Lender | w_jun | r_jun | r_jul | change | contribution |
+|---|---|---|---|---|---|
+| VIVRITI | 0.36752 | 3.097 | 3.703 | +0.605 | **+0.2224** |
+| SLICE | 0.25653 | 2.589 | 3.192 | +0.602 | **+0.1545** |
+| SMICC | 0.20881 | 2.941 | 3.108 | +0.167 | +0.0349 |
+| JUPITER | 0.11435 | 3.316 | 3.631 | +0.315 | +0.0360 |
+| CASHTREE | 0.03566 | 3.763 | 6.413 | +2.650 | +0.0945 |
+| LENDBOX | 0.01713 | 2.760 | 2.423 | −0.336 | −0.0058 |
+| **Rate effect** | | | | | **+0.5365** |
+
+Five of six got worse. VIVRITI and SLICE supply two-thirds of it, both moving ~+0.60 pp on
+large books. CASHTREE moved furthest (+2.65 pp) but is too small to contribute much.
+
+**Worked arithmetic — mix effect:**
+
+| Lender | w_jun | w_jul | shift | r_jul | contribution |
+|---|---|---|---|---|---|
+| JUPITER | 0.11435 | 0.15442 | +0.04007 | 3.631 | +0.1455 |
+| CASHTREE | 0.03566 | 0.04812 | +0.01246 | 6.413 | +0.0799 |
+| VIVRITI | 0.36752 | 0.37655 | +0.00903 | 3.703 | +0.0335 |
+| LENDBOX | 0.01713 | 0.00994 | −0.00719 | 2.423 | −0.0174 |
+| SMICC | 0.20881 | 0.19171 | −0.01710 | 3.108 | −0.0532 |
+| SLICE | 0.25653 | 0.21925 | −0.03727 | 3.192 | −0.1190 |
+| **Mix effect** | | | | | **+0.0693** |
+
+Nearly self-cancelling — JUPITER gaining share offsets SLICE losing it. Reshuffling volume
+among established lenders is not part of the story.
+
+**Worked arithmetic — entry/exit is a dilution, not a leftover:**
+
+```text
+The six continuing lenders, as a block:
+  their own blended rate     June 2.9775%  ->  July 3.5834%   = +0.6058 pp
+  and  +0.6058 = rate +0.5365 + mix +0.0693      <- the two tables above
+
+  their share of the book    June  97.20%  ->  July  78.48%
+  entrants took 21.52% of July at 6.232%  (CAPRION, Western Capital, NIYOGIN_APOLLO)
+  NIYOGIN held   2.80% of June at 5.261%  and left
+
+  June total = 0.9720 x 2.9775 + 0.0280 x 5.2612 = 3.0434%
+  July total = 0.7848 x 3.5834 + 0.2152 x 6.2324 = 4.1534%
+  TOTAL MOVE                                     = +1.1100 pp
+
+ENTRY/EXIT = total move - the block's own change = 1.1100 - 0.6058 = +0.5041 pp
+```
+
+The +0.5041 is **dilution**: the continuing block's rate rose only 0.61 pp, but it shrank
+from 97.2% to 78.5% of the book, and what replaced it ran at **6.23% against the block's
+3.58%**. Nearly a fifth of July's Renewal lending came from lenders barely present in June,
+at almost double the rate of those who were.
+
+*(4-dp totals are computed on unrounded rupees; reproducing them from the 3-dp rates above
+drifts ~0.002 pp.)*
+
 **Cut B — by experiment:**
 
 | Component | pp | Share |
