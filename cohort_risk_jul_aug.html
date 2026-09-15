@@ -1059,7 +1059,7 @@ footer{
   <figure>
     <div class="chartscroll">
     <svg viewBox="0 0 800 348" width="800" role="img"
-         aria-label="Waterfall decomposing Renewal's ECL move from 3.04 percent in June to 4.15 percent in July. Continuing lenders getting worse adds 0.54 points, volume shifting toward worse lenders adds 0.41 points, and lender entry and exit adds 0.16 points.">
+         aria-label="Waterfall decomposing Renewal's ECL move from 3.04 percent in June to 4.15 percent in July. Continuing lenders getting worse adds 0.54 points, volume reshuffle among them adds 0.07 points, and lenders entering or leaving adds 0.50 points.">
       <g stroke="var(--hairline)" stroke-width="1">
         <line x1="80" y1="218.9" x2="720" y2="218.9"/>
         <line x1="80" y1="167.8" x2="720" y2="167.8"/>
@@ -1073,22 +1073,22 @@ footer{
 
       <g stroke="var(--hairline-strong)" stroke-width="1" stroke-dasharray="3 3">
         <line x1="182" y1="114.45" x2="234" y2="114.45"/>
-        <line x1="310" y1="86.97"  x2="362" y2="86.97"/>
-        <line x1="438" y1="66.01"  x2="490" y2="66.01"/>
+        <line x1="310" y1="87.03"  x2="362" y2="87.03"/>
+        <line x1="438" y1="83.49"  x2="490" y2="83.49"/>
         <line x1="566" y1="57.71"  x2="618" y2="57.71"/>
       </g>
 
       <rect class="mark" x="106" y="114.45" width="76" height="155.55" rx="3" fill="var(--hist)"><title>June 2026 · Renewal ECL 3.0434%</title></rect>
-      <rect class="mark" x="234" y="86.97"  width="76" height="27.48" rx="3" fill="var(--critical)"><title>Same lenders got worse (rate effect) · +0.5378 pp</title></rect>
-      <rect class="mark" x="362" y="66.01"  width="76" height="20.96" rx="3" fill="var(--warning)"><title>Volume shifted toward worse lenders (mix effect) · +0.4100 pp — CAPRION alone +0.78</title></rect>
-      <rect class="mark" x="490" y="57.71"  width="76" height="8.30"  rx="3" fill="var(--good)"><title>Entry / exit: Western Capital in, NIYOGIN out · +0.1622 pp</title></rect>
+      <rect class="mark" x="234" y="87.03"  width="76" height="27.42" rx="3" fill="var(--critical)"><title>Same lenders got worse (rate effect) · +0.5365 pp · 48.3%</title></rect>
+      <rect class="mark" x="362" y="78.49"  width="76" height="5.0"  rx="2" fill="var(--warning)"><title>Volume reshuffle among established lenders (mix) · +0.0693 pp · 6.2% (drawn at minimum height to stay visible)</title></rect>
+      <rect class="mark" x="490" y="57.71"  width="76" height="25.78" rx="3" fill="var(--good)"><title>Lenders entering / leaving: CAPRION and Western Capital in, NIYOGIN out · +0.5041 pp · 45.4%</title></rect>
       <rect class="mark" x="618" y="57.71"  width="76" height="212.29" rx="3" fill="var(--ink-soft)"><title>July 2026 · Renewal ECL 4.1534%</title></rect>
 
       <g class="svg-mono" font-size="13" font-weight="500" text-anchor="middle">
         <text x="144" y="106" fill="var(--ink-soft)">3.04</text>
         <text x="272" y="79"  fill="var(--critical)">+0.54</text>
-        <text x="400" y="58"  fill="var(--warning)">+0.41</text>
-        <text x="528" y="50"  fill="var(--good)">+0.16</text>
+        <text x="400" y="70"  fill="var(--warning)">+0.07</text>
+        <text x="528" y="50"  fill="var(--good)">+0.50</text>
         <text x="656" y="50"  fill="var(--ink-soft)">4.15</text>
       </g>
 
@@ -1096,23 +1096,23 @@ footer{
       <g font-size="11.5" fill="var(--ink-soft)" text-anchor="middle">
         <text x="144" y="290">June 2026</text>
         <text x="272" y="290">same lenders</text>
-        <text x="400" y="290">volume mix</text>
-        <text x="528" y="290">entry / exit</text>
+        <text x="400" y="290">reshuffle</text>
+        <text x="528" y="290">lenders in / out</text>
         <text x="656" y="290">July 2026</text>
       </g>
       <g font-size="10.5" fill="var(--ink-muted)" text-anchor="middle">
         <text x="272" y="305">each got worse</text>
-        <text x="400" y="305">shifted to worse ones</text>
-        <text x="528" y="305">W.Capital in, NIYOGIN out</text>
+        <text x="400" y="305">between established</text>
+        <text x="528" y="305">CAPRION + W.Capital in</text>
       </g>
       <text x="400" y="334" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Renewal ECL %, June → July 2026 · exact shift-share, no counterfactual</text>
     </svg>
     </div>
     <figcaption>
-      An exact identity — the three parts sum to +1.1100 pp with no residual and no assumption.
-      <b>Nearly half is the same lenders simply getting worse.</b> A third is volume shifting toward
-      the worse ones — CAPRION alone contributes +0.78 pp of mix, partly offset by SLICE (−0.20) and
-      VIVRITI (−0.14) shrinking. Only a seventh is genuine entry/exit.
+      An exact identity — the three parts sum to +1.1100 pp with no residual. The move is
+      <b>roughly half new lenders, roughly half the old ones getting worse</b>, and almost nothing in
+      between: reshuffling volume among the six established lenders accounts for just +0.07 pp.
+      CAPRION is counted as an entrant — 18 loans in June is 0.57% of the book, not a relationship.
     </figcaption>
   </figure>
 
@@ -1125,13 +1125,27 @@ footer{
     <table>
       <thead><tr><th>Cut A — by lender <span style="text-transform:none;letter-spacing:0">(the waterfall above)</span></th><th>pp</th><th>%</th></tr></thead>
       <tbody>
-        <tr><td><span class="dot c"></span>Same lenders got worse — <em>rate</em></td><td class="svg-mono">+0.5378</td><td class="svg-mono">48.5</td></tr>
-        <tr><td><span class="dot w"></span>Volume shifted to worse lenders — <em>mix</em></td><td class="svg-mono">+0.4100</td><td class="svg-mono">36.9</td></tr>
-        <tr><td><span class="dot g"></span>Entry / exit</td><td class="svg-mono">+0.1622</td><td class="svg-mono">14.6</td></tr>
+        <tr><td><span class="dot c"></span>Same lenders got worse — <em>rate</em></td><td class="svg-mono">+0.5365</td><td class="svg-mono">48.3</td></tr>
+        <tr><td><span class="dot g"></span>Lenders entering / leaving</td><td class="svg-mono">+0.5041</td><td class="svg-mono">45.4</td></tr>
+        <tr><td><span class="dot w"></span>Reshuffle among established lenders — <em>mix</em></td><td class="svg-mono">+0.0693</td><td class="svg-mono">6.2</td></tr>
         <tr class="total"><td>Total</td><td class="svg-mono">+1.1100</td><td class="svg-mono">100.0</td></tr>
       </tbody>
     </table>
   </div>
+
+  <p class="sec-note" style="margin-top:-6px">
+    <b>Who counts as "entering".</b> CAPRION wrote 18 loans in June — ₹0.34 Cr, <b>0.57%</b> of the
+    month's Renewal book — then 523 in July. Treating that as a continuing relationship is a
+    technicality, so it is counted as an entrant. The cut is "at least 1% of June disbursal", and
+    June's lenders fall either side of it cleanly: LENDBOX 1.67%, then CAPRION 0.57%, then nothing.
+  </p>
+  <p class="sec-note">
+    <b>The choice barely touches the headline.</b> Count CAPRION as continuing instead and the
+    rate effect moves only +0.5378 vs +0.5365 — the "same lenders got worse" finding is robust
+    either way. What the choice moves is where CAPRION's ₹9.79 Cr of July volume is booked:
+    as an entrant it makes lenders-in/out +0.50, as continuing it shifts to reshuffle (+0.41 mix,
+    +0.16 in/out). Same total, same conclusion about the old lenders.
+  </p>
 
   <div class="tablewrap" style="margin-bottom:22px">
     <table>
@@ -1245,10 +1259,9 @@ CHANGE = 0.3329 − 0.2661 = +0.0668 pp   →  6.0% of the +1.1100 total</pre>
     ECL, against 3.24% for the lenders already there.</b>
   </p>
   <p class="sec-note">
-    Note what this does <em>not</em> say. Literal entry and exit is only <b>+0.16 pp — 14.6%</b> of
-    the move. The bigger pieces are <b>the same lenders getting worse (+0.54)</b> and <b>volume
-    shifting toward the worse ones (+0.41)</b>, and CAPRION sits in the second of those: it existed
-    in June with 18 loans, so its jump to 523 is a reallocation, not an entry.
+    So the move splits almost evenly: <b>+0.50 pp from lenders arriving</b> (CAPRION and Western
+    Capital, both around 6.1–6.3% ECL) and <b>+0.54 pp from the lenders already there getting
+    worse</b>. Moving volume around between the established six explains almost none of it (+0.07).
   </p>
   <p class="sec-note">
     The largest single component is the one with no name attached to it. <b>Every continuing lender

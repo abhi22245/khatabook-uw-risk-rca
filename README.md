@@ -444,9 +444,9 @@ Two exact cuts of the same +1.1100 pp. Both sum with no residual and no assumpti
 
 | Component | pp | Share |
 |---|---|---|
-| Same lenders got worse — *rate* | **+0.5378** | 48.5% |
-| Volume shifted to worse lenders — *mix* | **+0.4100** | 36.9% |
-| Entry / exit (W. Capital in, NIYOGIN out) | **+0.1622** | 14.6% |
+| Same lenders got worse — *rate* | **+0.5365** | 48.3% |
+| Lenders entering / leaving | **+0.5041** | 45.4% |
+| Reshuffle among established lenders — *mix* | **+0.0693** | 6.2% |
 | **Total** | **+1.1100** | 100% |
 
 ```text
@@ -457,14 +457,26 @@ entry/exit  = total - rate - mix
   r = lender's ECL% that month
 ```
 
-Largest single mix contributor is **CAPRION +0.7839** (18 → 523 loans), partly offset by SLICE
-−0.2047 and VIVRITI −0.1390 shrinking. CAPRION counts as *continuing*, not *entry* — the
-counterparty existed in June; what changed was the allocation to it.
+**Who counts as "continuing":** present in both months **and** ≥1% of June's Renewal
+disbursal. The 1% cut is not arbitrary — June's lenders fall either side of it cleanly
+(LENDBOX 1.67%, then CAPRION 0.57%, then nothing). CAPRION wrote 18 loans / ₹0.34 Cr in
+June and 523 in July, so it is classed as an **entrant**, not a continuing relationship.
+
+**The cut barely moves the headline.** Class CAPRION as continuing instead and rate is
++0.5378 vs +0.5365 — "the same lenders got worse" holds either way. What moves is where
+CAPRION's ₹9.79 Cr of July volume books:
+
+| | rate | mix | entry/exit |
+|---|---|---|---|
+| CAPRION as **entrant** (published) | +0.5365 | +0.0693 | **+0.5041** |
+| CAPRION as continuing | +0.5378 | +0.4100 | +0.1622 |
+
+Same total, same conclusion about the established lenders.
 
 > **This supersedes the first-pass counterfactual method** ("what if new lenders had performed
-> at the continuing-lender rate"), which needed an unverifiable assumption and gave a softer
-> +0.52 / +0.52 / +0.07 split. The two agree in aggregate — 0.4100 + 0.1622 = 0.57 ≈ the old
-> "new lenders" 0.52, and 0.5378 ≈ the old "drift" 0.52 — but the shift-share is exact, so use it.
+> at the continuing-lender rate"), which needed an unverifiable assumption. The two land in
+> nearly the same place — old "new lenders" 0.52 vs new entry/exit 0.5041; old "drift" 0.52 vs
+> new rate 0.5365 — but the shift-share is exact, so use it.
 
 **Cut B — by experiment:**
 

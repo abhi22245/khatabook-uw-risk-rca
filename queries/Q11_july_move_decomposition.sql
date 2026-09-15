@@ -20,14 +20,21 @@
 --   r = lender's ECL% that month
 --   Weight by amount, not loan count — ECL% is an amount-weighted ratio.
 --
--- "Continuing" here means literally present in BOTH months, which is the
--- assumption-free cut. Note CAPRION counts as continuing (18 loans in June) even
--- though its July volume is 28x higher; that surge therefore lands in the MIX
--- effect, not entry/exit. That is the correct place for it — the counterparty
--- existed, the allocation to it changed.
+-- WHO COUNTS AS "CONTINUING": a lender present in BOTH months with at least 1%
+-- of June's Renewal disbursal. The 1% cut is not arbitrary — June's lenders fall
+-- either side of it cleanly (LENDBOX 1.67%, then CAPRION 0.57%, then nothing).
+-- CAPRION wrote 18 loans / Rs 0.34 Cr in June and 523 in July; calling that a
+-- continuing relationship is a technicality, so it is classed as an entrant.
 --
--- Verified 2026-09-15:
---   rate  +0.5378 pp (48.5%)   mix +0.4100 pp (36.9%)   entry/exit +0.1622 pp (14.6%)
+-- THE CUT BARELY MOVES THE HEADLINE. Classing CAPRION as continuing instead
+-- gives rate +0.5378 vs +0.5365 — the "same lenders got worse" result is robust
+-- either way. What it moves is where CAPRION's Rs 9.79 Cr of July volume books:
+--   CAPRION as entrant    : rate +0.5365  mix +0.0693  entry/exit +0.5041
+--   CAPRION as continuing : rate +0.5378  mix +0.4100  entry/exit +0.1622
+-- Same total, same conclusion about the established lenders.
+--
+-- Verified 2026-09-15 (CAPRION as entrant):
+--   rate +0.5365 pp (48.3%)  mix +0.0693 pp (6.2%)  entry/exit +0.5041 pp (45.4%)
 --   total +1.1100 pp, matching 4.1534% - 3.0434% exactly.
 --
 -- This query returns the per-lender inputs; compute the three effects from them
@@ -76,19 +83,35 @@ per_lender AS (
         SUM(IFF(m = '2026-07-01', 1, 0))   AS jul_loans
     FROM base
     GROUP BY lender
+),
+
+-- materiality rule applied in its own step: Snowflake will not nest window
+-- functions, so June's month share has to be materialised before it can be
+-- used inside another windowed SUM.
+classified AS (
+    SELECT
+        p.*,
+        jun_disb / NULLIF(SUM(jun_disb) OVER (), 0) AS jun_share_of_month,
+        IFF(jun_disb / NULLIF(SUM(jun_disb) OVER (), 0) >= 0.01 AND jul_disb > 0,
+            'continuing',
+            IFF(jul_disb > 0, 'entered', 'exited'))  AS status
+    FROM per_lender p
 )
 
 SELECT
     lender,
-    IFF(jun_disb > 0 AND jul_disb > 0, 'continuing',
-        IFF(jul_disb > 0, 'entered', 'exited'))            AS status,
+    status,
     jun_loans, jul_loans,
-    ROUND(jun_disb / 1e7, 3)                               AS jun_disb_cr,
-    ROUND(jul_disb / 1e7, 3)                               AS jul_disb_cr,
-    ROUND(jun_ecl * 100.0 / NULLIF(jun_disb, 0), 3)        AS jun_ecl_pct,
-    ROUND(jul_ecl * 100.0 / NULLIF(jul_disb, 0), 3)        AS jul_ecl_pct,
-    -- weights among CONTINUING lenders only (the shift-share base)
-    ROUND(jun_disb / NULLIF(SUM(IFF(jun_disb > 0 AND jul_disb > 0, jun_disb, 0)) OVER (), 0), 5) AS w_jun,
-    ROUND(jul_disb / NULLIF(SUM(IFF(jun_disb > 0 AND jul_disb > 0, jul_disb, 0)) OVER (), 0), 5) AS w_jul
-FROM per_lender
+    ROUND(jun_disb / 1e7, 3)                           AS jun_disb_cr,
+    ROUND(jul_disb / 1e7, 3)                           AS jul_disb_cr,
+    ROUND(jun_ecl * 100.0 / NULLIF(jun_disb, 0), 3)    AS jun_ecl_pct,
+    ROUND(jul_ecl * 100.0 / NULLIF(jul_disb, 0), 3)    AS jul_ecl_pct,
+    ROUND(jun_share_of_month * 100, 2)                 AS jun_pct_of_month,
+    -- weights among CONTINUING lenders only — the shift-share base
+    -- NULL for entered/exited: they are not part of the shift-share base
+    IFF(status = 'continuing',
+        ROUND(jun_disb / NULLIF(SUM(IFF(status = 'continuing', jun_disb, 0)) OVER (), 0), 5), NULL) AS w_jun,
+    IFF(status = 'continuing',
+        ROUND(jul_disb / NULLIF(SUM(IFF(status = 'continuing', jul_disb, 0)) OVER (), 0), 5), NULL) AS w_jul
+FROM classified
 ORDER BY jul_disb DESC
