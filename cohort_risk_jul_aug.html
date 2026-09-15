@@ -1053,13 +1053,13 @@ footer{
     Everything above shows the OVERRULE-B experiment is lossy. None of it shows it <em>changed</em> in July — and
     that is what would make it the cause rather than a standing problem. Tracking it monthly back to
     April 2025 settles it: <b>the experiment accounts for about 6% of Renewal's June→July move.</b>
-    Roughly half the move is something else entirely — lenders.
+    The rest is lenders — but mostly not the ones that are new.
   </p>
 
   <figure>
     <div class="chartscroll">
     <svg viewBox="0 0 800 348" width="800" role="img"
-         aria-label="Waterfall chart decomposing Renewal's ECL move from 3.04 percent in June to 4.15 percent in July. New lenders add 0.52 points, the OVERRULE-B experiment adds 0.07 points, and broad drift across continuing lenders adds 0.52 points.">
+         aria-label="Waterfall decomposing Renewal's ECL move from 3.04 percent in June to 4.15 percent in July. Continuing lenders getting worse adds 0.54 points, volume shifting toward worse lenders adds 0.41 points, and lender entry and exit adds 0.16 points.">
       <g stroke="var(--hairline)" stroke-width="1">
         <line x1="80" y1="218.9" x2="720" y2="218.9"/>
         <line x1="80" y1="167.8" x2="720" y2="167.8"/>
@@ -1067,103 +1067,120 @@ footer{
         <line x1="80" y1="65.6" x2="720" y2="65.6"/>
       </g>
       <g class="svg-mono" font-size="11" fill="var(--ink-muted)" text-anchor="end">
-        <text x="72" y="274">0</text>
-        <text x="72" y="223">1</text>
-        <text x="72" y="172">2</text>
-        <text x="72" y="121">3</text>
-        <text x="72" y="70">4</text>
+        <text x="72" y="274">0</text><text x="72" y="223">1</text><text x="72" y="172">2</text>
+        <text x="72" y="121">3</text><text x="72" y="70">4</text>
       </g>
 
-      <!-- step connectors -->
       <g stroke="var(--hairline-strong)" stroke-width="1" stroke-dasharray="3 3">
-        <line x1="182" y1="114.6" x2="234" y2="114.6"/>
-        <line x1="310" y1="88.0"  x2="362" y2="88.0"/>
-        <line x1="438" y1="84.5"  x2="490" y2="84.5"/>
-        <line x1="566" y1="57.9"  x2="618" y2="57.9"/>
+        <line x1="182" y1="114.45" x2="234" y2="114.45"/>
+        <line x1="310" y1="86.97"  x2="362" y2="86.97"/>
+        <line x1="438" y1="66.01"  x2="490" y2="66.01"/>
+        <line x1="566" y1="57.71"  x2="618" y2="57.71"/>
       </g>
 
-      <rect class="mark" x="106" y="114.62" width="76" height="155.38" rx="3" fill="var(--hist)"><title>June 2026 · Renewal ECL 3.04%</title></rect>
-      <rect class="mark" x="234" y="88.04"  width="76" height="26.58" rx="3" fill="var(--critical)"><title>New / surged lenders: CAPRION and Western Capital · +0.52 pp</title></rect>
-      <rect class="mark" x="362" y="82.0"   width="76" height="6.0"   rx="2" fill="var(--warning)"><title>Overrule risk bucket B growing its excess · +0.07 pp (drawn at minimum height to stay visible)</title></rect>
-      <rect class="mark" x="490" y="57.89"  width="76" height="26.58" rx="3" fill="var(--critical)"><title>Broad drift across continuing lenders · +0.52 pp</title></rect>
-      <rect class="mark" x="618" y="57.89"  width="76" height="212.11" rx="3" fill="var(--ink-soft)"><title>July 2026 · Renewal ECL 4.15%</title></rect>
+      <rect class="mark" x="106" y="114.45" width="76" height="155.55" rx="3" fill="var(--hist)"><title>June 2026 · Renewal ECL 3.0434%</title></rect>
+      <rect class="mark" x="234" y="86.97"  width="76" height="27.48" rx="3" fill="var(--critical)"><title>Same lenders got worse (rate effect) · +0.5378 pp</title></rect>
+      <rect class="mark" x="362" y="66.01"  width="76" height="20.96" rx="3" fill="var(--warning)"><title>Volume shifted toward worse lenders (mix effect) · +0.4100 pp — CAPRION alone +0.78</title></rect>
+      <rect class="mark" x="490" y="57.71"  width="76" height="8.30"  rx="3" fill="var(--good)"><title>Entry / exit: Western Capital in, NIYOGIN out · +0.1622 pp</title></rect>
+      <rect class="mark" x="618" y="57.71"  width="76" height="212.29" rx="3" fill="var(--ink-soft)"><title>July 2026 · Renewal ECL 4.1534%</title></rect>
 
       <g class="svg-mono" font-size="13" font-weight="500" text-anchor="middle">
         <text x="144" y="106" fill="var(--ink-soft)">3.04</text>
-        <text x="272" y="80"  fill="var(--critical)">+0.52</text>
-        <text x="400" y="74"  fill="var(--warning)">+0.07</text>
-        <text x="528" y="50"  fill="var(--critical)">+0.52</text>
+        <text x="272" y="79"  fill="var(--critical)">+0.54</text>
+        <text x="400" y="58"  fill="var(--warning)">+0.41</text>
+        <text x="528" y="50"  fill="var(--good)">+0.16</text>
         <text x="656" y="50"  fill="var(--ink-soft)">4.15</text>
       </g>
 
       <line x1="80" y1="270" x2="720" y2="270" stroke="var(--hairline-strong)" stroke-width="1"/>
       <g font-size="11.5" fill="var(--ink-soft)" text-anchor="middle">
         <text x="144" y="290">June 2026</text>
-        <text x="272" y="290">new lenders</text>
-        <text x="400" y="290" fill="var(--warning)">OVERRULE-B</text>
-        <text x="528" y="290">broad drift</text>
+        <text x="272" y="290">same lenders</text>
+        <text x="400" y="290">volume mix</text>
+        <text x="528" y="290">entry / exit</text>
         <text x="656" y="290">July 2026</text>
       </g>
       <g font-size="10.5" fill="var(--ink-muted)" text-anchor="middle">
-        <text x="272" y="305">CAPRION, W. Capital</text>
-        <text x="400" y="305">the experiment</text>
-        <text x="528" y="305">continuing lenders</text>
+        <text x="272" y="305">each got worse</text>
+        <text x="400" y="305">shifted to worse ones</text>
+        <text x="528" y="305">W.Capital in, NIYOGIN out</text>
       </g>
-      <text x="400" y="334" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Renewal ECL %, June → July 2026 · the OVERRULE-B experiment is the thin band</text>
+      <text x="400" y="334" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Renewal ECL %, June → July 2026 · exact shift-share, no counterfactual</text>
     </svg>
     </div>
     <figcaption>
-      Renewal moved +1.11 pp. The OVERRULE-B experiment contributed <b>+0.07 pp</b> — the sliver. It
-      carries a quarter of Renewal's <em>loss</em>, but almost none of its <em>change</em>.
-      <b>The three bars are not equally certain</b> — see below.
+      An exact identity — the three parts sum to +1.1100 pp with no residual and no assumption.
+      <b>Nearly half is the same lenders simply getting worse.</b> A third is volume shifting toward
+      the worse ones — CAPRION alone contributes +0.78 pp of mix, partly offset by SLICE (−0.20) and
+      VIVRITI (−0.14) shrinking. Only a seventh is genuine entry/exit.
     </figcaption>
   </figure>
 
-  <h3 style="margin-top:30px">How much to trust each bar</h3>
-  <div class="tablewrap" style="margin-bottom:18px">
+  <h3 style="margin-top:30px">Where every number comes from</h3>
+  <p class="sec-note">
+    Two separate cuts of the same +1.1100 pp. Both are exact; they slice it differently.
+  </p>
+
+  <div class="tablewrap" style="margin-bottom:22px">
     <table>
-      <thead>
-        <tr><th>Component</th><th>pp</th><th>Confidence</th><th>Why</th></tr>
-      </thead>
+      <thead><tr><th>Cut A — by lender <span style="text-transform:none;letter-spacing:0">(the waterfall above)</span></th><th>pp</th><th>%</th></tr></thead>
       <tbody>
-        <tr>
-          <td><span class="dot w"></span>OVERRULE-B experiment</td>
-          <td class="svg-mono">+0.07</td>
-          <td><b>High</b></td>
-          <td class="flagcell" style="white-space:normal">Pure arithmetic from measured values, no judgement call. Cross-checked two ways.</td>
-        </tr>
-        <tr>
-          <td><span class="dot c"></span>New / surged lenders</td>
-          <td class="svg-mono">+0.52</td>
-          <td><b>Medium</b><br><span style="font-weight:400;color:var(--ink-muted)">range 0.16–0.64</span></td>
-          <td class="flagcell" style="white-space:normal">Depends where you cut "new", and on a counterfactual that can't be measured.</td>
-        </tr>
-        <tr>
-          <td><span class="dot n"></span>Broad drift</td>
-          <td class="svg-mono">+0.52</td>
-          <td><b>Low</b> as a label</td>
-          <td class="flagcell" style="white-space:normal">A residual — whatever the other two don't capture, including the mix effect.</td>
-        </tr>
+        <tr><td><span class="dot c"></span>Same lenders got worse — <em>rate</em></td><td class="svg-mono">+0.5378</td><td class="svg-mono">48.5</td></tr>
+        <tr><td><span class="dot w"></span>Volume shifted to worse lenders — <em>mix</em></td><td class="svg-mono">+0.4100</td><td class="svg-mono">36.9</td></tr>
+        <tr><td><span class="dot g"></span>Entry / exit</td><td class="svg-mono">+0.1622</td><td class="svg-mono">14.6</td></tr>
+        <tr class="total"><td>Total</td><td class="svg-mono">+1.1100</td><td class="svg-mono">100.0</td></tr>
       </tbody>
     </table>
   </div>
+
+  <div class="tablewrap" style="margin-bottom:22px">
+    <table>
+      <thead><tr><th>Cut B — by experiment</th><th>pp</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot w"></span>OVERRULE-B experiment growing its excess</td><td class="svg-mono">+0.0668</td><td class="svg-mono">6.0</td></tr>
+        <tr><td><span class="dot n"></span>Everything else</td><td class="svg-mono">+1.0432</td><td class="svg-mono">94.0</td></tr>
+        <tr class="total"><td>Total</td><td class="svg-mono">+1.1100</td><td class="svg-mono">100.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:30px">Deriving the +0.0668, from rupees</h3>
   <p class="sec-note">
-    <b>+0.07 is the one that does not move.</b> It is
-    <span class="svg-mono" style="font-size:12.5px">0.09491 × 3.508 − 0.08201 × 3.245 = +0.0668</span>,
-    straight from July and June disbursal and ECL, and a second method (hold June's contribution
-    fixed, recompute July) lands on the same figure. The <b>+0.52 for new lenders</b> is stable at
-    0.52 for any cut between 25 and 100 June loans, but falls to <b>0.16</b> if only literal
-    zero-June entrants count (Western Capital alone) and rises to <b>0.64</b> if CASHTREE and
-    LENDBOX are pulled in — and it rests on assuming those loans would have performed at the
-    continuing-lender rate under someone else, which nobody can know. The final <b>+0.52 is a
-    remainder</b>, not a measurement: it is 1.11 − 0.07 − 0.52, and it absorbs the mix effect of the
-    experiment's share rising from 8.20% to 9.49%. Its <em>label</em> is supported by continuing
-    lenders visibly rising together; its <em>size</em> is just what is left.
+    The four numbers in <span class="svg-mono" style="font-size:12.5px">0.09491 × 3.508 − 0.08201 ×
+    3.245</span> are two <b>shares</b> and two <b>lifts</b>. Each comes straight from disbursed
+    amount and ECL:
   </p>
-  <p class="sec-note">
-    The robust claim is the narrow one: <b>the OVERRULE-B experiment is a small part of the July
-    move — roughly 6%, and under any reasonable alternative accounting still under 10%.</b> How the
-    other ~94% divides between new lenders and broad drift is directional, not settled.
+  <div class="tablewrap" style="margin-bottom:18px">
+    <table>
+      <thead><tr><th></th><th>Disbursed ₹</th><th>ECL ₹</th><th>ECL %</th></tr></thead>
+      <tbody>
+        <tr><td>June — OVERRULE-B</td><td class="svg-mono">48,846,424</td><td class="svg-mono">2,941,664</td><td class="svg-mono">6.022</td></tr>
+        <tr><td>June — rest of Renewal</td><td class="svg-mono">546,802,537</td><td class="svg-mono">15,186,323</td><td class="svg-mono">2.777</td></tr>
+        <tr class="total"><td>June — all Renewal</td><td class="svg-mono">595,648,961</td><td class="svg-mono">18,127,987</td><td class="svg-mono">3.0434</td></tr>
+        <tr><td>July — OVERRULE-B</td><td class="svg-mono">79,687,795</td><td class="svg-mono">5,839,617</td><td class="svg-mono">7.328</td></tr>
+        <tr><td>July — rest of Renewal</td><td class="svg-mono">759,938,664</td><td class="svg-mono">29,033,280</td><td class="svg-mono">3.820</td></tr>
+        <tr class="total"><td>July — all Renewal</td><td class="svg-mono">839,626,459</td><td class="svg-mono">34,872,898</td><td class="svg-mono">4.1534</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <pre class="sql" style="border:1px solid var(--hairline)">share = OVERRULE-B disbursed / all Renewal disbursed
+  June:  48,846,424 / 595,648,961 = 0.08201
+  July:  79,687,795 / 839,626,459 = 0.09491
+
+lift  = OVERRULE-B ECL% − rest-of-Renewal ECL%
+  June:  6.022 − 2.777 = 3.245
+  July:  7.328 − 3.820 = 3.508
+
+contribution = share × lift        ("how much of Renewal's ECL% exists
+  June:  0.08201 × 3.245 = 0.2661   because this experiment is worse
+  July:  0.09491 × 3.508 = 0.3329   than everything around it")
+
+CHANGE = 0.3329 − 0.2661 = +0.0668 pp   →  6.0% of the +1.1100 total</pre>
+  <p class="sec-note" style="margin-top:14px">
+    Sanity check on the whole identity:
+    <span class="svg-mono" style="font-size:12.5px">0.08201 × 6.022 + 0.91799 × 2.777 = 3.0434%</span>
+    and <span class="svg-mono" style="font-size:12.5px">0.09491 × 7.328 + 0.90509 × 3.820 =
+    4.1534%</span> — both match the directly-measured monthly rates exactly.
   </p>
 
   <h3 style="margin-top:34px">The OVERRULE-B experiment is a slow burn, not a July event</h3>
@@ -1178,10 +1195,7 @@ footer{
         <tr><th>Month</th><th>OVERRULE-B loans</th><th>Share of Renewal</th><th>OVERRULE-B ECL %</th><th>Rest of Renewal ECL %</th><th>Lift pp</th><th>Contribution to Renewal ECL pp</th></tr>
       </thead>
       <tbody>
-        <tr><td>Aug 2025</td><td>403</td><td>15.6%</td><td>5.11</td><td>4.13</td><td>+0.98</td><td>0.150</td></tr>
-        <tr><td>Nov 2025</td><td>315</td><td>12.5%</td><td>5.77</td><td>3.51</td><td>+2.26</td><td>0.289</td></tr>
-        <tr><td>Feb 2026</td><td>252</td><td>9.7%</td><td>5.90</td><td>3.57</td><td>+2.32</td><td>0.228</td></tr>
-        <tr><td>Apr 2026</td><td>273</td><td>9.3%</td><td>5.48</td><td>3.39</td><td>+2.09</td><td>0.205</td></tr>
+        <tr><td>Apr 2026</td><td>273</td><td>9.3%</td><td>5.48</td><td>3.43</td><td>+2.04</td><td>0.201</td></tr>
         <tr><td>May 2026</td><td>231</td><td>7.7%</td><td>6.32</td><td>3.58</td><td>+2.74</td><td>0.223</td></tr>
         <tr><td>Jun 2026</td><td>224</td><td>7.1%</td><td>6.02</td><td>2.78</td><td>+3.24</td><td>0.266</td></tr>
         <tr><td>Jul 2026</td><td>365</td><td>8.7%</td><td>7.33</td><td>3.82</td><td class="up">+3.51</td><td>0.333</td></tr>
@@ -1190,9 +1204,11 @@ footer{
     </table>
   </div>
   <p class="sec-note" style="margin-top:14px">
-    Lift has climbed every month of 2026 — +1.37 in January to +3.96 by August. That is a real and
+    Lift has climbed every month of 2026 — +2.04 in April to +3.96 by August. That is a real and
     worsening problem worth fixing on its own terms. It is just not what happened in July.
-    <span style="color:var(--ink-muted)">*1–10 Aug only. Full monthly series back to Apr 2025 in Q9.</span>
+    <span style="color:var(--ink-muted)">*1–10 Aug only. Shown from April 2026; Q9 returns the full
+    series back to Apr 2025, where the experiment ran 13–16% of Renewal for most of 2025 — which is
+    why July's 8.7% is unremarkable by historical standards even though it is a rise off a 2026 low.</span>
   </p>
 
   <h3 style="margin-top:34px">What actually changed: the lender panel turned over</h3>
@@ -1229,11 +1245,17 @@ footer{
     ECL, against 3.24% for the lenders already there.</b>
   </p>
   <p class="sec-note">
-    Note what this does <em>not</em> say. New lenders explain ~47% of the move; the OVERRULE-B experiment
-    ~6%. The remaining ~47% is every continuing lender drifting up at once — VIVRITI 2.55→3.07,
-    SLICE 2.51→3.15, CASHTREE 3.50→5.98. A broad drift across unrelated counterparties usually
-    points at something upstream of any single lender or experiment. That is unexplained and is now
-    the open question.
+    Note what this does <em>not</em> say. Literal entry and exit is only <b>+0.16 pp — 14.6%</b> of
+    the move. The bigger pieces are <b>the same lenders getting worse (+0.54)</b> and <b>volume
+    shifting toward the worse ones (+0.41)</b>, and CAPRION sits in the second of those: it existed
+    in June with 18 loans, so its jump to 523 is a reallocation, not an entry.
+  </p>
+  <p class="sec-note">
+    The largest single component is the one with no name attached to it. <b>Every continuing lender
+    got worse in the same month</b> — VIVRITI 3.10→3.70, SLICE 2.59→3.19, SMICC 2.94→3.11, JUPITER
+    3.32→3.63, CASHTREE 3.76→6.41. A simultaneous rise across unrelated counterparties is not a
+    lender problem and not an experiment problem; it points upstream of both. That is unexplained
+    and is now the open question.
   </p>
 </section>
 

@@ -438,44 +438,69 @@ survivorship bias), it doesn't.
 
 **Decomposition of Renewal's +1.11 pp June→July move:**
 
-| Component | pp | Share | Confidence |
-|---|---|---|---|
-| New / surged lenders (CAPRION, Western Capital) | **+0.52** | 47% | **Medium** — range 0.16–0.64 |
-| Broad drift across continuing lenders | **+0.52** | 47% | **Low as a label** — it's the residual |
-| OVERRULE-B experiment growing its excess | **+0.07** | 6% | **High** — pure arithmetic |
-| **Total** | **+1.11** | 100% | |
+Two exact cuts of the same +1.1100 pp. Both sum with no residual and no assumption.
 
-**Worked arithmetic for the +0.07** (the only component with no judgement call):
+**Cut A — by lender** (`Q11`, shift-share):
+
+| Component | pp | Share |
+|---|---|---|
+| Same lenders got worse — *rate* | **+0.5378** | 48.5% |
+| Volume shifted to worse lenders — *mix* | **+0.4100** | 36.9% |
+| Entry / exit (W. Capital in, NIYOGIN out) | **+0.1622** | 14.6% |
+| **Total** | **+1.1100** | 100% |
 
 ```text
-Renewal ECL% = share_OVERRULE-B x its ECL%  +  rest share x rest ECL%
-  June:  0.08201 x 6.022  +  0.91799 x 2.777  = 0.4939 + 2.5495 = 3.0434%
-  July:  0.09491 x 7.328  +  0.90509 x 3.820  = 0.6955 + 3.4579 = 4.1534%
-  MOVE = +1.1100 pp
-
-contribution = share_of_disbursal x (own ECL% - rest ECL%)
-  June: 0.08201 x 3.245 = 0.2661 pp
-  July: 0.09491 x 3.508 = 0.3329 pp
-  CHANGE = +0.0668 pp  ->  6.0% of 1.1100
+rate effect = SUM over continuing lenders of  w_jun x (r_jul - r_jun)
+mix effect  = SUM over continuing lenders of  (w_jul - w_jun) x r_jul
+entry/exit  = total - rate - mix
+  w = lender's share of DISBURSED AMOUNT among continuing lenders
+  r = lender's ECL% that month
 ```
 
-Cross-checked a second way: hold the experiment at June's contribution and recompute July
-→ 3.8205 + 0.2661 = 4.0866% vs actual 4.1534% → same +0.0668.
+Largest single mix contributor is **CAPRION +0.7839** (18 → 523 loans), partly offset by SLICE
+−0.2047 and VIVRITI −0.1390 shrinking. CAPRION counts as *continuing*, not *entry* — the
+counterparty existed in June; what changed was the allocation to it.
 
-**The +0.52 for new lenders is softer.** Two reasons. (a) Where you cut "new": stable at
-0.52 for any threshold between 25 and 100 June loans, but **0.16** if only literal zero-June
-entrants count (Western Capital alone) and **0.64** if CASHTREE and LENDBOX are pulled in.
-(b) It assumes those loans would have run at the continuing-lender rate under a different
-lender — an assumption, not a measurement.
+> **This supersedes the first-pass counterfactual method** ("what if new lenders had performed
+> at the continuing-lender rate"), which needed an unverifiable assumption and gave a softer
+> +0.52 / +0.52 / +0.07 split. The two agree in aggregate — 0.4100 + 0.1622 = 0.57 ≈ the old
+> "new lenders" 0.52, and 0.5378 ≈ the old "drift" 0.52 — but the shift-share is exact, so use it.
 
-**The final +0.52 is a remainder**, not a measurement: `1.11 − 0.07 − 0.52`. It absorbs
-everything the other two miss, including the mix effect of the experiment's share rising
-8.20% → 9.49%. Its *label* is supported by continuing lenders visibly rising together; its
-*size* is just what is left.
+**Cut B — by experiment:**
 
-> **The robust claim is the narrow one:** the OVERRULE-B experiment is a small part of the
-> July move — ~6%, and under any reasonable alternative accounting still under 10%. How the
-> other ~94% divides between new lenders and broad drift is directional, not settled.
+| Component | pp | Share |
+|---|---|---|
+| OVERRULE-B experiment growing its excess | **+0.0668** | 6.0% |
+| Everything else | +1.0432 | 94.0% |
+
+**Deriving the +0.0668 from rupees** (this is where `0.09491 × 3.508 − 0.08201 × 3.245` comes from):
+
+| | Disbursed ₹ | ECL ₹ | ECL % |
+|---|---|---|---|
+| June — OVERRULE-B | 48,846,424 | 2,941,664 | 6.022 |
+| June — rest of Renewal | 546,802,537 | 15,186,323 | 2.777 |
+| **June — all Renewal** | **595,648,961** | **18,127,987** | **3.0434** |
+| July — OVERRULE-B | 79,687,795 | 5,839,617 | 7.328 |
+| July — rest of Renewal | 759,938,664 | 29,033,280 | 3.820 |
+| **July — all Renewal** | **839,626,459** | **34,872,898** | **4.1534** |
+
+```text
+share = OVERRULE-B disbursed / all Renewal disbursed
+  June:  48,846,424 / 595,648,961 = 0.08201
+  July:  79,687,795 / 839,626,459 = 0.09491
+
+lift  = OVERRULE-B ECL% - rest-of-Renewal ECL%
+  June:  6.022 - 2.777 = 3.245
+  July:  7.328 - 3.820 = 3.508
+
+contribution = share x lift
+  June:  0.08201 x 3.245 = 0.2661 pp
+  July:  0.09491 x 3.508 = 0.3329 pp
+  CHANGE = +0.0668 pp  ->  6.0% of +1.1100
+```
+
+Identity check: `0.08201 x 6.022 + 0.91799 x 2.777 = 3.0434%` and
+`0.09491 x 7.328 + 0.90509 x 3.820 = 4.1534%` — both match the measured monthly rates exactly.
 
 **The OVERRULE-B experiment is a slow burn, not a July event.** Its share of Renewal fell through 2026 to a
 7.1% low in June and rose to 8.7% in July — but it ran 13–16% through most of 2025, so July
@@ -523,9 +548,11 @@ column only loosely (trap 6). Full series in `Q9`.
 Newcomers wrote **20.8% of July's Renewal outside the experiment disbursal at 6.01% ECL, vs 3.24% for
 lenders already there**.
 
-**Still unexplained:** the other ~47%. Every continuing lender drifted up at once — VIVRITI
-2.55→3.07, SLICE 2.51→3.15, CASHTREE 3.50→5.98. A simultaneous drift across unrelated
-counterparties usually points upstream of any single lender or experiment.
+**Still unexplained: the +0.5378 rate effect — the largest single component.** Every
+continuing lender got worse in the same month: VIVRITI 3.10→3.70, SLICE 2.59→3.19, SMICC
+2.94→3.11, JUPITER 3.32→3.63, CASHTREE 3.76→6.41. A simultaneous rise across unrelated
+counterparties is neither a lender problem nor an experiment problem — it points upstream of
+both (scoring, policy, or the applicant population itself). **Start here.**
 
 ---
 
@@ -573,7 +600,8 @@ the Snowflake RSA key.
 | `Q7_concentration_vs_control.sql` | Loan-level ECL for the 500 + two healthy control buckets | §6.4 concentration table. Compute the curve / Gini downstream |
 | `Q8_overrule_bucket_b_by_lender.sql` | Lender split of the 500, each lender vs its own other-experiment baseline | §6.5 |
 | `Q9_overrule_bucket_b_monthly.sql` | Bucket share + seasoning-immune lift, monthly Apr 2025 → Aug 2026 | §6.6. **Read `lift_pp`, not `ecl_pct`, across months** |
-| `Q10_overrule_bucket_b_lender_by_month.sql` | Lender entry/exit inside the bucket, with NEW/EXITED/CONTINUING status | §6.6 |
+| `Q10_overrule_bucket_b_lender_by_month.sql` | Lender entry/exit inside the experiment, with NEW/EXITED/CONTINUING status | §6.6 |
+| `Q11_july_move_decomposition.sql` | Per-lender inputs for the exact shift-share of the June→July move | §6.6 Cut A. **Supersedes the counterfactual method** |
 
 Two notes on the CSV: `calib_pd` comes back as the string `null` and `risk_bucket_final`
 is JSON-quoted (`"B"`) — artefacts of VARIANT extraction upstream in
