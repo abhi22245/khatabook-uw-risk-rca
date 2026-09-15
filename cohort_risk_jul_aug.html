@@ -689,7 +689,7 @@ footer{
     Experiment: Risk Bucket B / C</span>,&nbsp; <span class="svg-mono" style="font-size:12.5px">NPS Experiment:
     Risk Bucket B</span> and <span class="svg-mono" style="font-size:12.5px">NPS POLICY OVERRULE RISK
     BUCKET B</span>. Together they are an eighth of Renewal's loans and nearly a quarter of its loss,
-    at 7.48% against the cohort's 4.10%. The bucket-A overrule sits at 4.22% — essentially at
+    at 7.48% against the cohort's 4.10%. The bucket-A overrule experiment sits at 4.22% — essentially at
     baseline. Whatever is wrong is specific to overruling into B and C, not to overruling as such.
   </p>
 
@@ -748,8 +748,8 @@ footer{
   <p class="sec-note">
     The obvious hope is that 7.35% is a handful of blow-ups dragging an otherwise fine book. It
     isn't — and the proof is not the theoretical even-loss line, which no real credit book sits on,
-    but the healthy book beside it. Both curves below rank a bucket's loans worst-first and plot the
-    running share of its loss. <b>The lossy bucket is the <em>flatter</em> of the two.</b>
+    but the healthy book beside it. Both curves below rank a book's loans worst-first and plot the
+    running share of its loss. <b>The lossy book is the <em>flatter</em> of the two.</b>
   </p>
 
   <figure>
@@ -780,9 +780,9 @@ footer{
       <polyline points="60,320 104,215.6 148,160.1 192,127.4 236,101.6 280,80.9 324,64.6 368,52.6 412,45.0 456,41.1 500,40"
                 fill="none" stroke="var(--critical)" stroke-width="2.5"
                 stroke-linejoin="round" stroke-linecap="round"/>
-      <circle class="mark" cx="104" cy="215.6" r="5" fill="var(--critical)" stroke="var(--surface)" stroke-width="2"><title>Overrule bucket B · top 10% of loans hold 37.3% of ECL</title></circle>
-      <circle class="mark" cx="148" cy="160.1" r="5" fill="var(--critical)" stroke="var(--surface)" stroke-width="2"><title>Overrule bucket B · top 20% of loans hold 57.1% of ECL</title></circle>
-      <text x="160" y="228" font-size="11.5" fill="var(--critical)" font-weight="600">Overrule bucket B · 7.35% ECL</text>
+      <circle class="mark" cx="104" cy="215.6" r="5" fill="var(--critical)" stroke="var(--surface)" stroke-width="2"><title>OVERRULE-B experiment · top 10% of loans hold 37.3% of ECL</title></circle>
+      <circle class="mark" cx="148" cy="160.1" r="5" fill="var(--critical)" stroke="var(--surface)" stroke-width="2"><title>OVERRULE-B experiment · top 20% of loans hold 57.1% of ECL</title></circle>
+      <text x="160" y="228" font-size="11.5" fill="var(--critical)" font-weight="600">OVERRULE-B experiment · 7.35% ECL</text>
       <text x="160" y="242" font-size="10.5" fill="var(--ink-muted)">lossy book — loss is spread across the population</text>
 
       <line x1="60" y1="320" x2="500" y2="320" stroke="var(--hairline-strong)" stroke-width="1"/>
@@ -807,9 +807,9 @@ footer{
     </svg>
     </div>
     <figcaption>
-      The healthy bucket is the <em>more</em> concentrated one: in <b>NORMAL LOAN</b> the worst 10%
+      The healthy book is the <em>more</em> concentrated one: in <b>NORMAL LOAN</b> the worst 10%
       of loans carry 48.8% of the loss, and half the loss sits in just 11% of loans. In the overrule
-      bucket the worst 10% carry only 37.3%, and it takes 16% of loans to reach half. Its loss is
+      OVERRULE-B experiment the worst 10% carry only 37.3%, and it takes 16% of loans to reach half. Its loss is
       spread more evenly because the whole population is worse — the median loan already sits at
       4.74% ECL, above the entire Renewal cohort's 4.10%.
     </figcaption>
@@ -818,12 +818,12 @@ footer{
   <div class="tablewrap" style="margin-top:22px">
     <table>
       <thead>
-        <tr><th>Renewal bucket</th><th>Loans</th><th>ECL %</th><th>Worst 2%<br>hold</th><th>Worst 10%<br>hold</th><th>Half the loss<br>sits in</th><th>Gini</th></tr>
+        <tr><th>Renewal experiment</th><th>Loans</th><th>ECL %</th><th>Worst 2%<br>hold</th><th>Worst 10%<br>hold</th><th>Half the loss<br>sits in</th><th>Gini</th></tr>
       </thead>
       <tbody>
         <tr><td><span class="dot g"></span>NORMAL LOAN</td><td>1,695</td><td>3.15</td><td>24.0%</td><td>48.8%</td><td>11% of loans</td><td>0.652</td></tr>
         <tr><td><span class="dot n"></span>OVERRULE POLICY</td><td>714</td><td>3.19</td><td>18.6%</td><td>44.3%</td><td>13% of loans</td><td>0.594</td></tr>
-        <tr><td><span class="dot c"></span>OVERRULE RISK BUCKET B</td><td>500</td><td class="up">7.35</td><td>11.7%</td><td>37.3%</td><td>16% of loans</td><td>0.533</td></tr>
+        <tr><td><span class="dot c"></span>OVERRULE-B experiment</td><td>500</td><td class="up">7.35</td><td>11.7%</td><td>37.3%</td><td>16% of loans</td><td>0.533</td></tr>
         <tr class="total"><td>if every loan lost the same</td><td>—</td><td>—</td><td>2.0%</td><td>10.0%</td><td>50% of loans</td><td>0.000</td></tr>
       </tbody>
     </table>
@@ -831,7 +831,7 @@ footer{
   <p class="sec-note" style="margin-top:16px">
     Concentration runs <em>opposite</em> to loss rate here, and that is the point. The two healthy
     buckets both sit at ~3.2% ECL with high concentration — a small tail of bad loans on top of a
-    clean book, which is what a working credit policy looks like. The overrule bucket has more than
+    clean book, which is what a working credit policy looks like. The OVERRULE-B experiment has more than
     double the loss rate and the <em>lowest</em> concentration of the three. You cannot fix it by
     removing a tail, because there is no tail to remove: the book is worse all the way through.
   </p>
@@ -839,17 +839,17 @@ footer{
   <h3 style="margin-top:34px">Why: they are already missing payments at month 1–2</h3>
   <p class="sec-note">
     All 500 loans are only 1–2 months on book at the ECL snapshot, yet four in five have already
-    missed a payment and one in five has hit 4+ DPD — several times the rate of any control bucket
+    missed a payment and one in five has hit 4+ DPD — several times the rate of any control experiment
     in the same cohort and the same window.
   </p>
   <div class="tablewrap" style="margin-bottom:26px">
     <table>
       <thead>
-        <tr><th>Renewal bucket</th><th>Loans</th><th>ECL %</th><th>Ever DPD&gt;0</th><th>Ever 4+ DPD</th><th>Currently DPD</th><th>Avg prior-loan max DPD</th></tr>
+        <tr><th>Renewal experiment</th><th>Loans</th><th>ECL %</th><th>Ever DPD&gt;0</th><th>Ever 4+ DPD</th><th>Currently DPD</th><th>Avg prior-loan max DPD</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><span class="dot c"></span>OVERRULE RISK BUCKET B</td>
+          <td><span class="dot c"></span>OVERRULE-B experiment</td>
           <td>500</td><td class="up">7.35</td><td class="up">80.4%</td><td class="up">20.0%</td><td class="up">31.8%</td><td class="up">4.05</td>
         </tr>
         <tr><td><span class="dot n"></span>NORMAL LOAN</td><td>1,695</td><td>3.15</td><td>50.5%</td><td>5.1%</td><td>9.1%</td><td>1.90</td></tr>
@@ -863,7 +863,7 @@ footer{
   <p class="sec-note">
     The last column above is the tell: these borrowers arrived with roughly double the prior-loan
     delinquency of the rest of Renewal. Splitting by the previous loan's max-ever DPD shows the
-    bucket is drawn almost entirely from the 4–10 DPD band that the rest of the cohort barely
+    experiment is drawn almost entirely from the 4–10 DPD band that the rest of the cohort barely
     touches — and that it still underperforms <em>within</em> every band.
   </p>
   <div class="tablewrap">
@@ -871,11 +871,11 @@ footer{
       <thead>
         <tr>
           <th rowspan="2" style="vertical-align:bottom">Prior loan<br>max DPD</th>
-          <th colspan="3" class="grouphead">Overrule bucket B &nbsp;·&nbsp; 500 loans</th>
+          <th colspan="3" class="grouphead">OVERRULE-B experiment &nbsp;·&nbsp; 500 loans</th>
           <th colspan="3" class="grouphead grouphead-alt">Rest of Renewal &nbsp;·&nbsp; 4,810 loans <span style="text-transform:none;letter-spacing:0">(control)</span></th>
         </tr>
         <tr>
-          <th>loans</th><th>share of<br>bucket</th><th>ECL %</th>
+          <th>loans</th><th>share of<br>experiment</th><th>ECL %</th>
           <th class="groupstart">loans</th><th>share of<br>control</th><th>ECL %</th>
         </tr>
       </thead>
@@ -889,7 +889,7 @@ footer{
     </table>
   </div>
   <p class="sec-note" style="margin-top:16px">
-    Two separate things are wrong, and they compound. <b>Mix:</b> 54% of this bucket comes from the
+    Two separate things are wrong, and they compound. <b>Mix:</b> 54% of this experiment comes from the
     4–10 prior-DPD band against 17% for the rest of Renewal, and almost none of it is clean-history
     (1 loan out of 500, versus 12.4%). <b>Performance within band:</b> even holding prior DPD fixed,
     these loans run 1.4–1.7× worse — 5.76% vs 3.35% in the 1–3 band, 8.62% vs 5.97% in the 4–10
@@ -912,7 +912,7 @@ footer{
   <figure>
     <div class="chartscroll">
     <svg viewBox="0 0 800 342" width="800" role="img"
-         aria-label="Dumbbell chart comparing each lender's ECL percent inside the overrule bucket B experiment against the same lender's other Renewal loans in the same window. Every one of the seven lenders is worse inside the experiment, by between 2.13 and 5.02 percentage points.">
+         aria-label="Dumbbell chart comparing each lender's ECL percent inside the OVERRULE-B experiment experiment against the same lender's other Renewal loans in the same window. Every one of the seven lenders is worse inside the experiment, by between 2.13 and 5.02 percentage points.">
       <g stroke="var(--hairline)" stroke-width="1">
         <line x1="292" y1="38" x2="292" y2="284"/>
         <line x1="394" y1="38" x2="394" y2="284"/>
@@ -964,13 +964,13 @@ footer{
 
       <!-- inside the experiment -->
       <g fill="var(--critical)" stroke="var(--surface)" stroke-width="2">
-        <circle class="mark" cx="560.8" cy="55" r="7"><title>VIVRITI · overrule bucket B · 7.27% ECL · 203 loans</title></circle>
-        <circle class="mark" cx="574.0" cy="89" r="7"><title>Western Capital · overrule bucket B · 7.53% ECL · 158 loans</title></circle>
-        <circle class="mark" cx="504.7" cy="123" r="7"><title>SMICC · overrule bucket B · 6.17% ECL · 44 loans</title></circle>
-        <circle class="mark" cx="605.1" cy="157" r="7"><title>CAPRION · overrule bucket B · 8.14% ECL · 28 loans</title></circle>
-        <circle class="mark" cx="619.4" cy="191" r="7"><title>JUPITER · overrule bucket B · 8.42% ECL · 26 loans</title></circle>
-        <circle class="mark" cx="471.0" cy="225" r="7"><title>SLICE · overrule bucket B · 5.51% ECL · 23 loans</title></circle>
-        <circle class="mark" cx="683.2" cy="259" r="7"><title>CASHTREE · overrule bucket B · 9.67% ECL · 17 loans</title></circle>
+        <circle class="mark" cx="560.8" cy="55" r="7"><title>VIVRITI · OVERRULE-B experiment · 7.27% ECL · 203 loans</title></circle>
+        <circle class="mark" cx="574.0" cy="89" r="7"><title>Western Capital · OVERRULE-B experiment · 7.53% ECL · 158 loans</title></circle>
+        <circle class="mark" cx="504.7" cy="123" r="7"><title>SMICC · OVERRULE-B experiment · 6.17% ECL · 44 loans</title></circle>
+        <circle class="mark" cx="605.1" cy="157" r="7"><title>CAPRION · OVERRULE-B experiment · 8.14% ECL · 28 loans</title></circle>
+        <circle class="mark" cx="619.4" cy="191" r="7"><title>JUPITER · OVERRULE-B experiment · 8.42% ECL · 26 loans</title></circle>
+        <circle class="mark" cx="471.0" cy="225" r="7"><title>SLICE · OVERRULE-B experiment · 5.51% ECL · 23 loans</title></circle>
+        <circle class="mark" cx="683.2" cy="259" r="7"><title>CASHTREE · OVERRULE-B experiment · 9.67% ECL · 17 loans</title></circle>
       </g>
 
       <g class="svg-mono" font-size="11.5" fill="var(--critical)" text-anchor="start">
@@ -986,7 +986,7 @@ footer{
 
       <g font-size="11" text-anchor="middle">
         <text x="346.1" y="40" fill="var(--good)">other experiments</text>
-        <text x="600" y="40" fill="var(--critical)">inside overrule bucket B</text>
+        <text x="600" y="40" fill="var(--critical)">inside OVERRULE-B experiment</text>
       </g>
 
       <line x1="190" y1="284" x2="700" y2="284" stroke="var(--hairline-strong)" stroke-width="1"/>
@@ -1014,7 +1014,7 @@ footer{
       <thead>
         <tr>
           <th rowspan="2" style="vertical-align:bottom">Lender</th>
-          <th colspan="5" class="grouphead">Inside overrule bucket B</th>
+          <th colspan="5" class="grouphead">Inside OVERRULE-B experiment</th>
           <th colspan="3" class="grouphead grouphead-alt">Same lender, other experiments <span style="text-transform:none;letter-spacing:0">(control)</span></th>
           <th rowspan="2" style="vertical-align:bottom">Lift<br>pp</th>
         </tr>
@@ -1038,9 +1038,9 @@ footer{
   </div>
 
   <p class="sec-note" style="margin-top:18px">
-    <b>No lender is dragging this bucket.</b> Loss share tracks volume share almost exactly —
+    <b>No lender is dragging this experiment.</b> Loss share tracks volume share almost exactly —
     VIVRITI and Western Capital are 72.2% of the loans and 73.1% of the loss. Measured as excess
-    against the bucket's own 7.35%, the largest single-lender contribution is ₹0.009 Cr, which is
+    against the experiment's own 7.35%, the largest single-lender contribution is ₹0.009 Cr, which is
     noise. Every lender in the experiment lands between 5.51% and 9.67%, and every one of them is
     above its own baseline. Routing loans away from one lender would not fix this — the policy
     produces the same bad book wherever it is sent.
@@ -1048,18 +1048,18 @@ footer{
 </section>
 
 <section>
-  <h2>So did the overrule bucket cause July? No.</h2>
+  <h2>So did the OVERRULE-B experiment cause July? No.</h2>
   <p class="sec-note">
-    Everything above shows the bucket is lossy. None of it shows it <em>changed</em> in July — and
+    Everything above shows the OVERRULE-B experiment is lossy. None of it shows it <em>changed</em> in July — and
     that is what would make it the cause rather than a standing problem. Tracking it monthly back to
-    April 2025 settles it: <b>the bucket accounts for about 6% of Renewal's June→July move.</b>
+    April 2025 settles it: <b>the experiment accounts for about 6% of Renewal's June→July move.</b>
     Roughly half the move is something else entirely — lenders.
   </p>
 
   <figure>
     <div class="chartscroll">
     <svg viewBox="0 0 800 348" width="800" role="img"
-         aria-label="Waterfall chart decomposing Renewal's ECL move from 3.04 percent in June to 4.15 percent in July. New lenders add 0.52 points, the overrule bucket adds 0.07 points, and broad drift across continuing lenders adds 0.52 points.">
+         aria-label="Waterfall chart decomposing Renewal's ECL move from 3.04 percent in June to 4.15 percent in July. New lenders add 0.52 points, the OVERRULE-B experiment adds 0.07 points, and broad drift across continuing lenders adds 0.52 points.">
       <g stroke="var(--hairline)" stroke-width="1">
         <line x1="80" y1="218.9" x2="720" y2="218.9"/>
         <line x1="80" y1="167.8" x2="720" y2="167.8"/>
@@ -1100,27 +1100,73 @@ footer{
       <g font-size="11.5" fill="var(--ink-soft)" text-anchor="middle">
         <text x="144" y="290">June 2026</text>
         <text x="272" y="290">new lenders</text>
-        <text x="400" y="290" fill="var(--warning)">overrule B</text>
+        <text x="400" y="290" fill="var(--warning)">OVERRULE-B</text>
         <text x="528" y="290">broad drift</text>
         <text x="656" y="290">July 2026</text>
       </g>
       <g font-size="10.5" fill="var(--ink-muted)" text-anchor="middle">
         <text x="272" y="305">CAPRION, W. Capital</text>
-        <text x="400" y="305">the 500's bucket</text>
+        <text x="400" y="305">the experiment</text>
         <text x="528" y="305">continuing lenders</text>
       </g>
-      <text x="400" y="334" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Renewal ECL %, June → July 2026 · the overrule bucket is the thin band</text>
+      <text x="400" y="334" font-size="11.5" fill="var(--ink-muted)" text-anchor="middle">Renewal ECL %, June → July 2026 · the OVERRULE-B experiment is the thin band</text>
     </svg>
     </div>
     <figcaption>
-      Renewal moved +1.11 pp. The overrule bucket contributed <b>+0.07 pp</b> — the sliver. Two
-      lenders that barely existed in June contributed <b>+0.52 pp</b>, and the remaining +0.52 pp is
-      continuing lenders all drifting up together. The bucket carries a quarter of Renewal's
-      <em>loss</em>, but almost none of its <em>change</em>.
+      Renewal moved +1.11 pp. The OVERRULE-B experiment contributed <b>+0.07 pp</b> — the sliver. It
+      carries a quarter of Renewal's <em>loss</em>, but almost none of its <em>change</em>.
+      <b>The three bars are not equally certain</b> — see below.
     </figcaption>
   </figure>
 
-  <h3 style="margin-top:34px">The bucket is a slow burn, not a July event</h3>
+  <h3 style="margin-top:30px">How much to trust each bar</h3>
+  <div class="tablewrap" style="margin-bottom:18px">
+    <table>
+      <thead>
+        <tr><th>Component</th><th>pp</th><th>Confidence</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dot w"></span>OVERRULE-B experiment</td>
+          <td class="svg-mono">+0.07</td>
+          <td><b>High</b></td>
+          <td class="flagcell" style="white-space:normal">Pure arithmetic from measured values, no judgement call. Cross-checked two ways.</td>
+        </tr>
+        <tr>
+          <td><span class="dot c"></span>New / surged lenders</td>
+          <td class="svg-mono">+0.52</td>
+          <td><b>Medium</b><br><span style="font-weight:400;color:var(--ink-muted)">range 0.16–0.64</span></td>
+          <td class="flagcell" style="white-space:normal">Depends where you cut "new", and on a counterfactual that can't be measured.</td>
+        </tr>
+        <tr>
+          <td><span class="dot n"></span>Broad drift</td>
+          <td class="svg-mono">+0.52</td>
+          <td><b>Low</b> as a label</td>
+          <td class="flagcell" style="white-space:normal">A residual — whatever the other two don't capture, including the mix effect.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-note">
+    <b>+0.07 is the one that does not move.</b> It is
+    <span class="svg-mono" style="font-size:12.5px">0.09491 × 3.508 − 0.08201 × 3.245 = +0.0668</span>,
+    straight from July and June disbursal and ECL, and a second method (hold June's contribution
+    fixed, recompute July) lands on the same figure. The <b>+0.52 for new lenders</b> is stable at
+    0.52 for any cut between 25 and 100 June loans, but falls to <b>0.16</b> if only literal
+    zero-June entrants count (Western Capital alone) and rises to <b>0.64</b> if CASHTREE and
+    LENDBOX are pulled in — and it rests on assuming those loans would have performed at the
+    continuing-lender rate under someone else, which nobody can know. The final <b>+0.52 is a
+    remainder</b>, not a measurement: it is 1.11 − 0.07 − 0.52, and it absorbs the mix effect of the
+    experiment's share rising from 8.20% to 9.49%. Its <em>label</em> is supported by continuing
+    lenders visibly rising together; its <em>size</em> is just what is left.
+  </p>
+  <p class="sec-note">
+    The robust claim is the narrow one: <b>the OVERRULE-B experiment is a small part of the July
+    move — roughly 6%, and under any reasonable alternative accounting still under 10%.</b> How the
+    other ~94% divides between new lenders and broad drift is directional, not settled.
+  </p>
+
+  <h3 style="margin-top:34px">The OVERRULE-B experiment is a slow burn, not a July event</h3>
   <p class="sec-note">
     Its share of Renewal fell through 2026 to a low of 7.1% in June, then rose to 8.7% in July —
     but it ran at 13–16% for most of 2025, so July is not unusual. What <em>has</em> moved steadily
@@ -1129,7 +1175,7 @@ footer{
   <div class="tablewrap">
     <table>
       <thead>
-        <tr><th>Month</th><th>Bucket loans</th><th>Share of Renewal</th><th>Bucket ECL %</th><th>Rest of Renewal ECL %</th><th>Lift pp</th><th>Contribution to Renewal ECL pp</th></tr>
+        <tr><th>Month</th><th>OVERRULE-B loans</th><th>Share of Renewal</th><th>OVERRULE-B ECL %</th><th>Rest of Renewal ECL %</th><th>Lift pp</th><th>Contribution to Renewal ECL pp</th></tr>
       </thead>
       <tbody>
         <tr><td>Aug 2025</td><td>403</td><td>15.6%</td><td>5.11</td><td>4.13</td><td>+0.98</td><td>0.150</td></tr>
@@ -1152,7 +1198,7 @@ footer{
   <h3 style="margin-top:34px">What actually changed: the lender panel turned over</h3>
   <p class="sec-note">
     Two lenders entered Renewal at scale in July and one left. The newcomers wrote a fifth of the
-    month's non-bucket Renewal book at roughly double the loss rate of the lenders that were
+    month's Renewal book outside the experiment at roughly double the loss rate of the lenders that were
     already there.
   </p>
   <div class="tablewrap">
@@ -1176,14 +1222,14 @@ footer{
   <p class="sec-note" style="margin-top:16px">
     <b>CAPRION</b> went from 18 Renewal loans in June to <b>499</b> in July — a 28× jump — at 6.20%.
     <b>Western Capital</b> wrote <b>zero</b> Renewal loans in June and 296 in July at 5.77%, plus 75
-    more inside the overrule bucket; it is a brand-new counterparty, not an expansion.
+    more inside the OVERRULE-B experiment; it is a brand-new counterparty, not an expansion.
     <b>NIYOGIN</b> ran 12 months in the experiment and stopped entirely after June
     (<code>NIYOGIN_APOLLO</code> appears in August with 1 loan — likely a re-onboarding, worth
-    confirming). Together the newcomers are <b>20.8% of July's non-bucket Renewal disbursal at 6.01%
+    confirming). Together the newcomers are <b>20.8% of July's Renewal disbursal outside the experiment at 6.01%
     ECL, against 3.24% for the lenders already there.</b>
   </p>
   <p class="sec-note">
-    Note what this does <em>not</em> say. New lenders explain ~47% of the move; the overrule bucket
+    Note what this does <em>not</em> say. New lenders explain ~47% of the move; the OVERRULE-B experiment
     ~6%. The remaining ~47% is every continuing lender drifting up at once — VIVRITI 2.55→3.07,
     SLICE 2.51→3.15, CASHTREE 3.50→5.98. A broad drift across unrelated counterparties usually
     points at something upstream of any single lender or experiment. That is unexplained and is now
@@ -1211,6 +1257,15 @@ footer{
         (<code>RISK_M0_MODEL_ECL_PREDICTIONS</code> × 0.88). Only 28% of loans match
         <code>ECL_PORTFOLIO</code>, and deployed values run ~16% low. Every figure here reads
         <code>LOAN_ECL_METRICS</code> directly. Don't mix the two.
+      </p>
+    </div>
+    <div class="caveat alert">
+      <h4>The ECL snapshot is still filling</h4>
+      <p>
+        The 2026-09-01 BOM grew from 390,223 rows / 320,598 loans on 11 Sep to
+        530,648 / 321,971 by 15 Sep — the duplicated loans went from 3 rows each to 7.
+        The <code>QUALIFY</code> dedup absorbed it (window figures re-run identical), but older
+        vintages shifted slightly. Re-run before quoting, and expect small drift.
       </p>
     </div>
     <div class="caveat">
@@ -1388,7 +1443,7 @@ SELECT
     ROUND(SUM(m0_ecl) / 1e7, 3)      AS ecl_cr,
     ROUND(SUM(LOAN_AMOUNT) / 1e7, 2) AS disbursed_cr,
     ROUND(SUM(m0_ecl) * 100.0 / NULLIF(SUM(LOAN_AMOUNT), 0), 2) AS ecl_pct,
-    -- rupees of loss above what this bucket would carry at the cohort rate
+    -- rupees of loss above what this experiment would carry at the cohort rate
     ROUND((SUM(m0_ecl) - SUM(LOAN_AMOUNT)
            * (SUM(SUM(m0_ecl))      OVER (PARTITION BY cohort)
             / SUM(SUM(LOAN_AMOUNT)) OVER (PARTITION BY cohort))) / 1e7, 3) AS excess_ecl_cr

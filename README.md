@@ -1,11 +1,11 @@
 # UW Risk RCA — Jul–Aug 2026 cohort deterioration
 
-**Status:** live investigation · **Branch:** `abhi_rca` · **Last updated:** 2026-09-11
+**Status:** live investigation · **Branch:** `abhi_rca` · **Last updated:** 2026-09-15
 **Artifact (findings dashboard):** https://claude.ai/code/artifact/07e5d5ba-77a7-478a-ae8e-9f198451dbe8
 
 > **If you are a new session picking this up cold: read [§1](#1-what-we-are-doing),
 > [§2](#2-how-to-run-a-query) and [§5](#5-traps-that-will-silently-corrupt-your-numbers)
-> before writing any SQL.** §5 in particular — four of those six traps produce
+> before writing any SQL.** §5 in particular — five of those seven traps produce
 > plausible-looking wrong numbers rather than errors.
 
 ---
@@ -31,6 +31,18 @@ number without a query behind it is not deliverable.
 5. Lender split of that experiment → **it's the policy, not a lender**
 6. Monthly attribution of the July move → **the experiment did *not* cause it; lender
    turnover plus a broad unexplained drift did**
+
+### A word on "bucket"
+
+The word is overloaded in this domain. Throughout this file:
+
+| Term | Means |
+|---|---|
+| **risk bucket B / C** | a **risk grade** the model assigns (`KB-B` in `RISK_BUCKET`) |
+| **the OVERRULE-B experiment** | the experiment type `POLICY RULES OVERRULE RISK BUCKET B POLICY` — the policy that overrules the rule for grade-B renewals |
+| **the 500** | the loans in that experiment, Renewal cohort, 1 Jul – 10 Aug 2026 |
+
+Never write bare "bucket" for the experiment — say "the OVERRULE-B experiment".
 
 > **Read §6.6 before acting on §6.3–6.5.** Those sections identify a genuinely bad experiment,
 > but §6.6 shows it accounts for only ~6% of what changed in July. Both are true; they answer
@@ -190,7 +202,15 @@ has the *old* ECL source. Reconcile before deploying either.
 
 Every one of these was hit and verified. Four produce wrong numbers rather than errors.
 
-**1. `LOAN_ECL_METRICS` has triplicate rows.** The 2026-09-01 BOM holds 390,223 rows for
+**0. The latest BOM is a LIVE, still-filling snapshot — your numbers will drift.**
+Verified: the 2026-09-01 BOM held 390,223 rows / 320,598 loans on 11 Sep and
+**530,648 rows / 321,971 loans by 15 Sep**. The 34,763 duplicated loans went from 3 rows
+each to **7**. The `QUALIFY` dedup absorbed all of it — Q1 re-ran bit-identical, and June
+and July in Q9 were unchanged — but **older vintages did shift** (April 2026
+rest-of-Renewal moved 3.39 → 3.43). Re-run before quoting a figure, and never assume a
+number from a previous session still holds. Date every result.
+
+**1. `LOAN_ECL_METRICS` has duplicate rows (3 per loan on 11 Sep, 7 by 15 Sep).** The 2026-09-01 BOM holds 390,223 rows for
 320,598 distinct loans — 285,736 loans appear once, 99 twice, and **34,763 three times**
 with identical ECL. The `QUALIFY ROW_NUMBER() ... = 1` is load-bearing; without it those
 loans' loss counts 3×. (Only 3 loans in the whole snapshot have differing ECL across
@@ -409,7 +429,7 @@ is **₹0.009 Cr** — noise. **No lender is dragging this bucket**, and routing
 would not fix it: the policy produces the same bad book wherever it is sent. This is
 consistent with §6.4 — broad-based, not concentrated.
 
-### 6.6 The overrule bucket did NOT cause the July move — lender turnover did
+### 6.6 The OVERRULE-B experiment did NOT cause the July move — lender turnover did
 
 `Q9`, `Q10`. **This overturns the direction §6.3–6.5 was pointing.** Those sections show the
 bucket is lossy; they never showed it *changed* in July, which is what would make it the
@@ -418,27 +438,62 @@ survivorship bias), it doesn't.
 
 **Decomposition of Renewal's +1.11 pp June→July move:**
 
-| Component | pp | Share |
-|---|---|---|
-| New / surged lenders (CAPRION, Western Capital) | **+0.52** | **47%** |
-| Broad drift across continuing lenders | **+0.52** | **47%** |
-| Overrule risk bucket B growing its excess | **+0.07** | **6%** |
-| **Total** | **+1.11** | 100% |
+| Component | pp | Share | Confidence |
+|---|---|---|---|
+| New / surged lenders (CAPRION, Western Capital) | **+0.52** | 47% | **Medium** — range 0.16–0.64 |
+| Broad drift across continuing lenders | **+0.52** | 47% | **Low as a label** — it's the residual |
+| OVERRULE-B experiment growing its excess | **+0.07** | 6% | **High** — pure arithmetic |
+| **Total** | **+1.11** | 100% | |
 
-**The bucket is a slow burn, not a July event.** Its share of Renewal fell through 2026 to a
+**Worked arithmetic for the +0.07** (the only component with no judgement call):
+
+```text
+Renewal ECL% = share_OVERRULE-B x its ECL%  +  rest share x rest ECL%
+  June:  0.08201 x 6.022  +  0.91799 x 2.777  = 0.4939 + 2.5495 = 3.0434%
+  July:  0.09491 x 7.328  +  0.90509 x 3.820  = 0.6955 + 3.4579 = 4.1534%
+  MOVE = +1.1100 pp
+
+contribution = share_of_disbursal x (own ECL% - rest ECL%)
+  June: 0.08201 x 3.245 = 0.2661 pp
+  July: 0.09491 x 3.508 = 0.3329 pp
+  CHANGE = +0.0668 pp  ->  6.0% of 1.1100
+```
+
+Cross-checked a second way: hold the experiment at June's contribution and recompute July
+→ 3.8205 + 0.2661 = 4.0866% vs actual 4.1534% → same +0.0668.
+
+**The +0.52 for new lenders is softer.** Two reasons. (a) Where you cut "new": stable at
+0.52 for any threshold between 25 and 100 June loans, but **0.16** if only literal zero-June
+entrants count (Western Capital alone) and **0.64** if CASHTREE and LENDBOX are pulled in.
+(b) It assumes those loans would have run at the continuing-lender rate under a different
+lender — an assumption, not a measurement.
+
+**The final +0.52 is a remainder**, not a measurement: `1.11 − 0.07 − 0.52`. It absorbs
+everything the other two miss, including the mix effect of the experiment's share rising
+8.20% → 9.49%. Its *label* is supported by continuing lenders visibly rising together; its
+*size* is just what is left.
+
+> **The robust claim is the narrow one:** the OVERRULE-B experiment is a small part of the
+> July move — ~6%, and under any reasonable alternative accounting still under 10%. How the
+> other ~94% divides between new lenders and broad drift is directional, not settled.
+
+**The OVERRULE-B experiment is a slow burn, not a July event.** Its share of Renewal fell through 2026 to a
 7.1% low in June and rose to 8.7% in July — but it ran 13–16% through most of 2025, so July
 is unremarkable. What *has* moved is its lift over the rest of the cohort, widening every
 month of 2026:
 
-| Month | Bucket loans | Share of Renewal | Bucket ECL % | Rest ECL % | Lift pp | Contribution pp |
+| Month | OVERRULE-B loans | Share of Renewal | OVERRULE-B ECL % | Rest ECL % | Lift pp | Contribution pp |
 |---|---|---|---|---|---|---|
-| Aug 2025 | 403 | 15.6% | 5.11 | 4.13 | +0.98 | 0.150 |
-| Nov 2025 | 315 | 12.5% | 5.77 | 3.51 | +2.26 | 0.289 |
-| Feb 2026 | 252 | 9.7% | 5.90 | 3.57 | +2.32 | 0.228 |
+| Apr 2026 | 273 | 9.3% | 5.48 | 3.43 | +2.04 | 0.201 |
 | May 2026 | 231 | 7.7% | 6.32 | 3.58 | +2.74 | 0.223 |
 | Jun 2026 | 224 | 7.1% | 6.02 | 2.78 | +3.24 | 0.266 |
 | Jul 2026 | 365 | 8.7% | 7.33 | 3.82 | **+3.51** | 0.333 |
 | Aug 2026* | 135 | 11.9% | 7.42 | 3.46 | **+3.96** | 0.450 |
+
+*(Apr 2026 onward, as requested. `Q9` returns the full series back to Apr 2025, where the
+experiment ran 13–16% of Renewal through most of 2025 — which is why July's 8.7% is not a
+notable share by historical standards. Apr 2026 values re-measured 15 Sep; they moved from
+3.39/3.60 on 12 Sep — see trap 0.)*
 
 `lift_pp` is the seasoning-immune column — both sides share a month, vintage and BOM
 snapshot, so only a real change in relative quality moves it. Compare `ecl_pct` down a
@@ -465,7 +520,7 @@ column only loosely (trap 6). Full series in `Q9`.
 - **NIYOGIN**: 12 months in the experiment, stopped entirely after June. `NIYOGIN_APOLLO`
   appears in Aug with 1 loan — likely a re-onboarding, **worth confirming**.
 
-Newcomers wrote **20.8% of July's non-bucket Renewal disbursal at 6.01% ECL, vs 3.24% for
+Newcomers wrote **20.8% of July's Renewal outside the experiment disbursal at 6.01% ECL, vs 3.24% for
 lenders already there**.
 
 **Still unexplained:** the other ~47%. Every continuing lender drifted up at once — VIVRITI
