@@ -27,6 +27,24 @@
 -- two tables — LOC says 'Western Capital', the BRE says 'WESTERN_CAP' — so they
 -- are normalised before joining.
 --
+-- LENDER REASSIGNMENT. 2,494 of 22,546 loans (11.1%) carry
+-- public_loan_applications_vw.metadata:lenderReassignmentData. Verified: on
+-- every one of them the application's own LENDER already equals LOC.LENDERNAME,
+-- i.e. the record holds the FINAL lender, so the lender-matched join above lands
+-- on the right one and reassignment needs no special handling. pct_reassigned is
+-- carried per row so a policy serving mostly reassigned loans is visible.
+-- Reassigned loans run 4.66% ECL against 4.44% for the rest — slightly worse,
+-- not dramatic.
+--
+-- ORDERING: ecl_pct DESC — riskiest first — with a MINIMUM VOLUME FLOOR of 50
+-- loans. The floor is not optional: without it the table is single-loan noise
+-- (top row 61.45% on ONE loan, then 44.95% on one, 31.81% on one ...). A rate
+-- computed on one loan is not a rate. Change MIN_LOANS below to re-cut it; set
+-- it to 0 only if you specifically want the long tail.
+--
+-- To rank by rupees of loss rather than by rate, order by ecl_cr DESC instead
+-- and drop the floor — size already filters out the noise there.
+--
 -- ECL is LOAN_ECL_METRICS.ECL_PORTFOLIO at the latest BOM, deduped per loan
 -- (README traps 0-1). Verified 2026-09-21.
 -- ============================================================================
@@ -44,6 +62,12 @@ WITH loc AS (
     FROM analytics.model.loan_origination_characteristics
     WHERE LOAN_DISBURSED_DATE >= '2026-07-01'
       AND LOAN_DISBURSED_DATE <  '2026-08-21'
+),
+
+app AS (
+    SELECT DISTINCT id, metadata:lenderReassignmentData AS reassign
+    FROM app_backend.loan_service_prod.public_loan_applications_vw
+    WHERE DATE(created_at) >= '2026-05-01'
 ),
 
 ecl AS (
@@ -74,12 +98,15 @@ SELECT
     ROUND(SUM(e.ECL_PORTFOLIO) / 1e7, 3)                 AS ecl_cr,
     ROUND(SUM(loc.loan_amount) / 1e7, 2)                 AS disbursed_cr,
     ROUND(SUM(e.ECL_PORTFOLIO) * 100.0
-          / NULLIF(SUM(loc.loan_amount), 0), 2)          AS ecl_pct
+          / NULLIF(SUM(loc.loan_amount), 0), 2)          AS ecl_pct,
+    ROUND(AVG(IFF(ap.reassign IS NOT NULL, 1, 0)) * 100, 1) AS pct_reassigned
 FROM loc
 LEFT JOIN policy p
        ON loc.LOAN_APPLICATION_ID = p.LOAN_APPLICATION_ID
       AND loc.lender_key          = p.lender_key
-LEFT JOIN ecl e ON loc.LOAN_ID = e.LOAN_ID
+LEFT JOIN app ap ON loc.LOAN_APPLICATION_ID = ap.id
+LEFT JOIN ecl e  ON loc.LOAN_ID = e.LOAN_ID
 GROUP BY 1, 2, 3
-ORDER BY loan_count DESC
+HAVING COUNT(*) >= 50          -- MIN_LOANS: see ORDERING note in the header
+ORDER BY ecl_pct DESC, loan_count DESC
 LIMIT 10
