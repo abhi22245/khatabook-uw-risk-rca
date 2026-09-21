@@ -70,7 +70,7 @@ base AS (
     -- half-open interval: LOAN_DISBURSED_DATE may carry a time component, so
     -- BETWEEN ... AND '2026-08-10' would silently drop most of 10 Aug.
     WHERE loc.LOAN_DISBURSED_DATE >= '2026-07-01'
-      AND loc.LOAN_DISBURSED_DATE <  '2026-08-11'
+      AND loc.LOAN_DISBURSED_DATE <  '2026-08-21'
 )
 
 SELECT

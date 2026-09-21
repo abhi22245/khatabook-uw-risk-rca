@@ -51,7 +51,7 @@ renewal AS (
     JOIN uw  ON loc.LOAN_ID = uw.LOAN_ID
     LEFT JOIN lem ON loc.LOAN_ID = lem.LOAN_ID
     WHERE loc.LOAN_DISBURSED_DATE >= '2025-04-01'
-      AND loc.LOAN_DISBURSED_DATE <  '2026-08-11'
+      AND loc.LOAN_DISBURSED_DATE <  '2026-08-21'
       AND uw.COMBINATION_TYPE <> 'AA'
       AND uw.IS_DORMANT_FLAG = 0
       AND uw.IS_RENEWAL = 1

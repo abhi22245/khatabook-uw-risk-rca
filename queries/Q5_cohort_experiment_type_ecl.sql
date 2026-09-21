@@ -61,7 +61,7 @@ base AS (
     LEFT JOIN uw  ON loc.LOAN_ID = uw.LOAN_ID
     LEFT JOIN ecl e ON loc.LOAN_ID = e.LOAN_ID
     WHERE loc.LOAN_DISBURSED_DATE >= '2026-07-01'
-      AND loc.LOAN_DISBURSED_DATE <  '2026-08-11'
+      AND loc.LOAN_DISBURSED_DATE <  '2026-08-21'
 )
 
 SELECT

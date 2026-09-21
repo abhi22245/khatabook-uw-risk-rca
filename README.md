@@ -1,6 +1,6 @@
 # UW Risk RCA — Jul–Aug 2026 cohort deterioration
 
-**Status:** live investigation · **Branch:** `abhi_rca` · **Last updated:** 2026-09-15
+**Status:** live investigation · **Branch:** `abhi_rca` · **Last updated:** 2026-09-21
 **Artifact (findings dashboard):** https://claude.ai/code/artifact/07e5d5ba-77a7-478a-ae8e-9f198451dbe8
 
 > **If you are a new session picking this up cold: read [§1](#1-what-we-are-doing),
@@ -12,7 +12,7 @@
 
 ## 1. What we are doing
 
-Finding out **which lending cohorts got riskier in 1 July – 10 August 2026**, and why.
+Finding out **which lending cohorts got riskier in 1 July – 20 August 2026**, and why.
 
 The measure of risk is **ECL** (expected credit loss) as a % of disbursed amount.
 Loans are split into four mutually exclusive cohorts: **Fresh**, **Renewal**,
@@ -40,7 +40,7 @@ The word is overloaded in this domain. Throughout this file:
 |---|---|
 | **risk bucket B / C** | a **risk grade** the model assigns (`KB-B` in `RISK_BUCKET`) |
 | **the OVERRULE-B experiment** | the experiment type `POLICY RULES OVERRULE RISK BUCKET B POLICY` — the policy that overrules the rule for grade-B renewals |
-| **the 500** | the loans in that experiment, Renewal cohort, 1 Jul – 10 Aug 2026 |
+| **the 610** | the loans in that experiment, Renewal cohort, 1 Jul – 20 Aug 2026 (was "the 500" when the window ended 10 Aug) |
 
 Never write bare "bucket" for the experiment — say "the OVERRULE-B experiment".
 
@@ -126,11 +126,11 @@ FROM analytics.model.loan_origination_characteristics loc
 LEFT JOIN uw  ON loc.LOAN_ID = uw.LOAN_ID
 LEFT JOIN ecl e ON loc.LOAN_ID = e.LOAN_ID
 WHERE loc.LOAN_DISBURSED_DATE >= '2026-07-01'
-  AND loc.LOAN_DISBURSED_DATE <  '2026-08-11'
+  AND loc.LOAN_DISBURSED_DATE <  '2026-08-21'
 ```
 
 Verified no fan-out (see [§5](#5-traps-that-will-silently-corrupt-your-numbers), trap 1):
-LOC in window = 17,512 rows / 17,512 distinct loans; after both LEFT JOINs, still 17,512.
+LOC in window = 22,546 rows / 22,546 distinct loans; after both LEFT JOINs, still 22,546.
 
 ### Cohort definition
 
@@ -149,13 +149,13 @@ overlaps both Fresh and Renewal. Raw 2×2 for this window:
 
 | LOC `LOAN_TYPE` | `IS_DORMANT_FLAG` | Loans |
 |---|---|---|
-| Fresh | 0 | 8,121 |
-| Renewal | 0 | 5,630 |
-| Fresh | 1 | 2,813 |
-| Renewal | 1 | 948 |
+| Fresh | 0 | 10,542 |
+| Renewal | 0 | 7,094 |
+| Fresh | 1 | 3,676 |
+| Renewal | 1 | 1,234 |
 
 Because dormancy is tested first, **"Fresh" here means _fresh and not dormant_**.
-Put fresh/renewal ahead of dormant instead and you get Fresh 10,550 / Renewal 6,578 /
+Put fresh/renewal ahead of dormant instead and you get Fresh 13,717 / Renewal 7,958 /
 Dormant 0 — same total, completely different story. We use dormancy-first because
 that is how the dashboards segment, and it is the only ordering under which Dormant
 is a cohort at all.
@@ -164,11 +164,11 @@ Reconciliation to the published numbers (AA carved out first):
 
 | | All | − AA | = Published |
 |---|---|---|---|
-| Fresh (non-dormant) | 8,121 | 384 | **7,737** |
-| Renewal (non-dormant) | 5,630 | 320 | **5,310** |
-| Dormant (2,813 + 948) | 3,761 | 222 | **3,539** |
-| AA | — | — | **926** |
-| | | | **17,512** |
+| Fresh (non-dormant) | 10,542 | 501 | **10,041** |
+| Renewal (non-dormant) | 7,094 | 390 | **6,704** |
+| Dormant (3,676 + 1,234) | 4,910 | 280 | **4,630** |
+| AA | — | — | **1,171** |
+| | | | **22,546** |
 
 Cross-check: LOC's own `LOAN_TYPE` agrees with `uw.IS_RENEWAL` on **every loan** —
 zero disagreement.
@@ -202,24 +202,25 @@ has the *old* ECL source. Reconcile before deploying either.
 
 Every one of these was hit and verified. Four produce wrong numbers rather than errors.
 
-**0. The latest BOM is a LIVE, still-filling snapshot — your numbers will drift.**
-Verified: the 2026-09-01 BOM held 390,223 rows / 320,598 loans on 11 Sep and
-**530,648 rows / 321,971 loans by 15 Sep**. The 34,763 duplicated loans went from 3 rows
-each to **7**. The `QUALIFY` dedup absorbed all of it — Q1 re-ran bit-identical, and June
-and July in Q9 were unchanged — but **older vintages did shift** (April 2026
-rest-of-Renewal moved 3.39 → 3.43). Re-run before quoting a figure, and never assume a
-number from a previous session still holds. Date every result.
+**0. The BOM snapshot moves — your numbers will drift between sessions.**
+The 2026-09-01 BOM was written incrementally: 390,223 rows / 320,598 loans on 11 Sep,
+530,648 / 321,971 by 15 Sep, and **324,907 / 324,907 by 21 Sep with the duplicates
+removed**. The `QUALIFY` dedup absorbed all of it — Q1 re-ran bit-identical throughout —
+but **older vintages did shift** (April 2026 rest-of-Renewal moved 3.39 → 3.43). Re-run
+before quoting a figure, never assume a number from a previous session holds, and date
+every result. A new BOM will move everything again.
 
-**1. `LOAN_ECL_METRICS` has duplicate rows (3 per loan on 11 Sep, 7 by 15 Sep).** The 2026-09-01 BOM holds 390,223 rows for
-320,598 distinct loans — 285,736 loans appear once, 99 twice, and **34,763 three times**
-with identical ECL. The `QUALIFY ROW_NUMBER() ... = 1` is load-bearing; without it those
-loans' loss counts 3×. (Only 3 loans in the whole snapshot have differing ECL across
-their rows, so which row you keep doesn't matter — that you keep only one does.) → `Q4`
+**1. `LOAN_ECL_METRICS` had duplicate rows (3 per loan on 11 Sep, 7 by 15 Sep, now none).**
+Through mid-September the 2026-09-01 BOM held up to 7 identical rows for each of 34,763
+loans. It has since been cleaned to one row per loan. **Keep the
+`QUALIFY ROW_NUMBER() ... = 1` anyway** — it is what kept every figure correct while that
+was true, and nothing guarantees the next BOM lands clean. → `Q4`
 
 **2. BOM must be `MAX(BOM)`, never `DATE_TRUNC('MONTH', CURRENT_DATE)`.** The current
 month has no BOM row until the monthly ECL job runs, so on the 1st of a month the
 calendar-month filter matches nothing and every ECL comes back NULL. Latest available
-is **2026-09-01**. (There are also 3 rows with a NULL BOM; `MAX()` ignores them.)
+is still **2026-09-01** as of 21 Sep — there is no October BOM yet, which is why
+extending the window to 20 Aug adds loans but *not* maturity (see trap 6).
 
 **3. `uw_decision_monitoring` must be filtered to the allocated arm.** Without
 `MODEL_VERSION = MODEL_VERSION_FINAL`, each BRE run's several model-arm rows fan out
@@ -234,16 +235,22 @@ distinct values. `EXPERIMENT_TYPE_FINAL` is a normalised rollup that differs on 
 loans (29%)**, collapsing `NORMAL LOAN`, `1 BOUNCE POLICY`, `2 BOUNCE POLICY` into
 `BAU` — which would merge the largest low-risk bucket with three others.
 
-**6. Seasoning confounds cross-month comparisons.** All ECL comes from one BOM snapshot,
-so July loans carry ~2 months of performance and January loans ~8. Comparing one cohort
-across months inherits that. **Control for it by comparing cohorts _within_ a month** —
-see the Fresh−Renewal spread in [§6.2](#62-it-is-not-a-seasoning-artifact).
+**6. Seasoning confounds cross-month comparisons, and a later window end does NOT fix it.**
+All ECL comes from one BOM snapshot, so July loans carry ~2 months of performance and
+January loans ~8. Extending the window from 10 Aug to 20 Aug added 5,034 loans whose ECL
+was struck when they were only **12–21 days old** — calendar time since disbursal is
+irrelevant; what matters is the BOM date. **Control for seasoning by comparing cohorts
+_within_ a month** — see the Fresh−Renewal spread in
+[§6.2](#62-it-is-not-a-seasoning-artifact).
+
+**7. Do not extend past 20 Aug.** Loans disbursed 21–31 Aug 2026 are in the snapshot with
+**ECL of exactly 0.0%** (6,117 loans). Including them silently dilutes every rate.
 
 Two smaller ones:
 
 - `LOAN_DISBURSED_DATE` may carry a time component. Use a half-open interval
-  (`>= '2026-07-01' AND < '2026-08-11'`), not `BETWEEN ... AND '2026-08-10'`, which
-  silently drops most of 10 Aug.
+  (`>= '2026-07-01' AND < '2026-08-21'`), not `BETWEEN ... AND '2026-08-20'`, which
+  silently drops most of 20 Aug.
 - `is_dormant_flag` here is the **dashboard** definition (BRE input flag with a whitelist
   fallback), *not* the live routing dormancy (flag AND isFresh). They disagree for some
   users — see `WARN_dormant_flag_definition` in the ds_rca_repo knowledge base.
@@ -258,29 +265,29 @@ Window totals (`Q1`). ECL coverage 100%; no unmapped loans.
 
 | Cohort | Loans | Disbursed ₹Cr | Avg ticket ₹ | ECL ₹Cr | ECL % | vs Jan–Jun 2026 |
 |---|---|---|---|---|---|---|
-| Fresh | 7,737 | 86.96 | 112,390 | 4.25 | 4.89 | above 2 of 6 months |
-| **Renewal** | 5,310 | 106.52 | 200,601 | 4.37 | **4.10** | **above all 6 months** |
-| Dormant | 3,539 | 47.99 | 135,600 | 2.07 | 4.32 | above 5 of 6 months |
-| AA | 926 | 14.28 | 154,163 | 0.65 | 4.58 | above 2 of 6 months |
-| **All** | **17,512** | **255.74** | **146,036** | **11.35** | **4.44** | |
+| Fresh | 10,041 | 114.18 | 113,709 | 5.75 | 5.04 | above 4 of 6 months |
+| **Renewal** | 6,704 | 134.22 | 200,205 | 5.47 | **4.08** | **above all 6 months** |
+| Dormant | 4,630 | 62.87 | 135,799 | 2.68 | 4.26 | above 5 of 6 months |
+| AA | 1,171 | 18.02 | 153,911 | 0.80 | 4.45 | above 2 of 6 months |
+| **All** | **22,546** | **329.29** | **146,053** | **14.70** | **4.47** | |
 
 **The cohort with the highest loss rate is not the cohort that got worse.** Fresh carries
-the highest rate (4.89%) but four of its six prior months were worse — that is normal for
-Fresh. Renewal at 4.10% is above *every* month of 2026; its previous worst was 3.88%
-(January) and June was 3.04%.
+the highest rate (5.04%) and has now passed four of its six prior months — it was only past
+two when the window ended on 10 Aug. Renewal at 4.08% is above *every* month of 2026; its
+previous worst was 3.88% (January) and June was 3.05%.
 
 Monthly ECL % by cohort (`Q2`), Aug = 1–10 only:
 
 | Month | Fresh | Renewal | Dormant | AA |
 |---|---|---|---|---|
-| Jan | 4.72 | 3.88 | 5.24 | 5.00 |
-| Feb | 4.92 | 3.80 | 3.87 | 4.65 |
-| Mar | 5.34 | 3.64 | 3.95 | 5.17 |
-| Apr | 5.19 | 3.60 | 4.14 | 4.59 |
-| May | 5.01 | 3.81 | 4.17 | 4.04 |
-| Jun | 4.39 | 3.04 | 3.56 | 3.55 |
+| Jan | 4.74 | 3.88 | 5.25 | 4.98 |
+| Feb | 4.91 | 3.80 | 3.87 | 4.64 |
+| Mar | 5.32 | 3.62 | 3.95 | 5.17 |
+| Apr | 5.20 | 3.64 | 4.14 | 4.62 |
+| May | 5.02 | 3.81 | 4.16 | 4.05 |
+| Jun | 4.40 | 3.05 | 3.56 | 3.53 |
 | **Jul** | 4.84 | **4.15** | 4.24 | 4.59 |
-| **Aug\*** | 5.06 | 3.91 | 4.57 | 4.52 |
+| **Aug\*** | 5.31 | 3.95 | 4.30 | 4.17 |
 
 Volume moved at the same time: the window ran 427 disbursals/day against June's 333
 (+28%). Monthly loan counts went Fresh 4,290→6,024, Renewal 3,138→4,174, Dormant
@@ -294,41 +301,41 @@ the same seasoning, so anything that moves the gap between them is real.
 
 | Jan | Feb | Mar | Apr | May | Jun | **Jul** | Aug\* |
 |---|---|---|---|---|---|---|---|
-| 0.84 | 1.12 | 1.70 | 1.59 | 1.20 | 1.35 | **0.69** | 1.15 |
+| 0.86 | 1.11 | 1.70 | 1.56 | 1.21 | 1.35 | **0.69** | 1.36 |
 
-Fresh normally runs 0.84–1.70 pp riskier than Renewal. In July that collapses to
-**0.69 pp — the narrowest of the year** — then reopens to 1.15 pp in August. Seasoning
+Fresh normally runs 0.86–1.70 pp riskier than Renewal. In July that collapses to
+**0.69 pp — the narrowest of the year** — then reopens to 1.36 pp across 1–20 August. Seasoning
 moves both cohorts together and cannot close the gap between them. So July's compression
 is Renewal deteriorating, and it looks like a **July-specific event** rather than a new
 run rate.
 
 ### 6.3 Renewal by experiment type — one experiment dominates
 
-`Q5`, 33 experiment types in Renewal. Ranked by **excess ECL** = rupees of loss above
-what the bucket would carry at Renewal's own 4.10% rate (raw ECL ₹ just ranks by size).
+`Q5`, 34 experiment types in Renewal. Ranked by **excess ECL** = rupees of loss above
+what the experiment would carry at Renewal's own 4.08% rate (raw ECL ₹ just ranks by size).
 
 | Experiment type | Loans | ECL ₹Cr | ECL % | Excess ₹Cr |
 |---|---|---|---|---|
-| **POLICY RULES OVERRULE RISK BUCKET B POLICY** | 500 | 0.774 | **7.35** | **+0.342** |
-| 5 Lakh ATS Experiment | 44 | 0.145 | 7.08 | +0.061 |
-| POLICY RULES OVERRULE RISK BUCKET C POLICY | 42 | 0.072 | 8.62 | +0.038 |
-| Tenure Experiment: Risk Bucket B | 51 | 0.075 | 8.20 | +0.037 |
-| … 25 more … | | | | |
-| POLICY RULES OVERRULE POLICY | 714 | 0.471 | 3.19 | −0.135 |
-| NORMAL LOAN | 1,695 | 0.890 | 3.15 | −0.270 |
+| **POLICY RULES OVERRULE RISK BUCKET B POLICY** | 610 | 0.937 | **7.39** | **+0.420** |
+| 5 Lakh ATS Experiment | 50 | 0.156 | 6.78 | +0.062 |
+| POLICY RULES OVERRULE RISK BUCKET C POLICY | 50 | 0.087 | 9.07 | +0.048 |
+| Tenure Experiment: Risk Bucket B | 62 | 0.089 | 8.01 | +0.044 |
+| … 28 more … | | | | |
+| POLICY RULES OVERRULE POLICY | 869 | 0.582 | 3.32 | −0.132 |
+| NORMAL LOAN | 2,179 | 1.115 | 3.07 | −0.365 |
 
-`POLICY RULES OVERRULE RISK BUCKET B POLICY` holds **9.4% of Renewal's loans but 17.7%
-of its ECL** — ₹0.342 Cr excess, 5.6× the next contributor. The plain `NORMAL LOAN` book,
-a third of the cohort, runs at 3.15%. **The BAU renewal book is not the problem.**
+`POLICY RULES OVERRULE RISK BUCKET B POLICY` holds **9.1% of Renewal's loans but 17.1%
+of its ECL** — ₹0.420 Cr excess, 6.8× the next contributor. The plain `NORMAL LOAN` book,
+a third of the cohort, runs at 3.07%. **The BAU renewal book is not the problem.**
 
 The pattern generalises — every experiment overruling into **risk bucket B or C** runs
 hot, and the bucket-A equivalent does not:
 
 | Grouping | Loans | % of cohort loans | ECL ₹Cr | % of cohort ECL | ECL % |
 |---|---|---|---|---|---|
-| Risk bucket **B/C** overrule family (6 experiments) | 706 | 13.3 | 1.036 | **23.7** | **7.48** |
-| NPS POLICY OVERRULE RISK BUCKET **A** | 212 | 4.0 | 0.120 | 2.7 | 4.22 |
-| Renewal, all types | 5,310 | 100.0 | 4.370 | 100.0 | 4.10 |
+| Risk bucket **B/C** overrule family (6 experiments) | 860 | 12.8 | 1.247 | **22.8** | **7.49** |
+| NPS POLICY OVERRULE RISK BUCKET **A** | 276 | 4.1 | 0.161 | 2.9 | 4.21 |
+| Renewal, all types | 6,704 | 100.0 | 5.469 | 100.0 | 4.08 |
 
 The six: `POLICY RULES OVERRULE RISK BUCKET B POLICY`, `POLICY RULES OVERRULE RISK BUCKET
 C POLICY`, `Tenure Experiment: Risk Bucket B`, `Tenure Experiment: Risk Bucket C`,
@@ -338,7 +345,7 @@ overruling into B and C, not to overruling as such.**
 
 ### 6.4 Inside the 500 — not a few bad loans; it's selection
 
-`Q6` → `data/renewal_overrule_bucket_b_500_loans.csv` (500 rows × 28 cols). **Not in git**
+`Q6` → `data/renewal_overrule_bucket_b_500_loans.csv` (now **610** rows × 28 cols; filename kept). **Not in git**
 — see [§7](#7-repo-contents); regenerate it with the command there.
 
 **Concentration — the loss is broad-based, and the control proves it.**
@@ -351,9 +358,9 @@ skewed (ECL scales with both loan size and risk), so no real portfolio sits near
 
 | Renewal bucket | Loans | ECL % | Worst 2% hold | Worst 10% hold | Half the loss in | Gini |
 |---|---|---|---|---|---|---|
-| NORMAL LOAN | 1,695 | 3.15 | 24.0% | 48.8% | 11% of loans | 0.652 |
-| OVERRULE POLICY | 714 | 3.19 | 18.6% | 44.3% | 13% of loans | 0.594 |
-| **OVERRULE RISK BUCKET B** | 500 | **7.35** | 11.7% | 37.3% | 16% of loans | **0.533** |
+| NORMAL LOAN | 2,179 | 3.07 | 22.9% | 48.0% | 11% of loans | 0.647 |
+| OVERRULE POLICY | 869 | 3.32 | 17.3% | 44.0% | 13% of loans | 0.590 |
+| **OVERRULE-B experiment** | 610 | **7.39** | 11.1% | 36.8% | 16% of loans | **0.530** |
 | *if every loan lost the same* | — | — | 2.0% | 10.0% | 50% of loans | 0.000 |
 
 **Concentration runs opposite to loss rate.** The two healthy buckets sit at ~3.2% ECL
@@ -362,8 +369,7 @@ credit policy looks like. The overrule bucket has more than double the loss rate
 **lowest** concentration of the three. There is no tail to remove; the book is worse all
 the way through.
 
-Loan-level ECL %: median **4.74** (already above Renewal's 4.10), p75 8.37, p90 15.12,
-p99 45.42, max 67.91. The *median* loan being above the cohort average is the clinching
+Loan-level ECL %: median **4.82** (already above Renewal's 4.08), p75 8.37. The *median* loan being above the cohort average is the clinching
 number — in a few-blow-ups book the median looks fine and only the tail is ugly.
 
 **They are already failing at MOB 1–2.** All 500 loans are 1–2 months on book at the
@@ -371,28 +377,28 @@ snapshot:
 
 | Renewal bucket | Loans | ECL % | Ever DPD>0 | Ever 4+ DPD | Currently DPD | Avg prior-loan max DPD |
 |---|---|---|---|---|---|---|
-| **OVERRULE RISK BUCKET B** | 500 | **7.35** | **80.4%** | **20.0%** | **31.8%** | **4.05** |
-| NORMAL LOAN | 1,695 | 3.15 | 50.5% | 5.1% | 9.1% | 1.90 |
-| OVERRULE POLICY | 714 | 3.19 | 59.4% | 8.8% | 16.1% | 2.30 |
-| All other Renewal | 2,401 | 4.22 | 58.6% | 7.3% | 14.2% | 2.26 |
+| **OVERRULE-B experiment** | 610 | **7.39** | **82.6%** | **20.7%** | **34.6%** | **3.99** |
+| NORMAL LOAN | 2,179 | 3.07 | 52.3% | 5.3% | 11.5% | 1.88 |
+| OVERRULE POLICY | 869 | 3.32 | 62.0% | 10.2% | 17.8% | 2.25 |
+| All other Renewal | 3,046 | 4.19 | 59.8% | 7.5% | 15.5% | 2.21 |
 
 **And they were selected that way.** Split by the previous loan's max-ever DPD
 (control = the 4,810 Renewal loans not in this experiment):
 
 | Prior loan max DPD | Overrule B loans | share | ECL % | Control loans | share | ECL % |
 |---|---|---|---|---|---|---|
-| 0 (clean) | 1 | 0.2% | 4.26 | 596 | 12.4% | 2.63 |
-| 1–3 | 229 | 45.8% | **5.76** | 3,364 | 69.9% | 3.35 |
-| 4–10 | 270 | **54.0%** | **8.62** | 821 | 17.1% | 5.97 |
-| 11–30 | 0 | — | — | 28 | 0.6% | 8.34 |
-| **All** | 500 | 100% | **7.35** | 4,810 | 100% | **3.75** |
+| 0 (clean) | 1 | 0.2% | 4.26 | 755 | 12.4% | 2.53 |
+| 1–3 | 285 | 46.7% | **6.22** | 4,298 | 70.5% | 3.37 |
+| 4–10 | 324 | **53.1%** | **8.35** | 1,011 | 16.6% | 5.99 |
+| 11–30 | 0 | — | — | 29 | 0.5% | 8.32 |
+| **All** | 610 | 100% | **7.39** | 6,094 | 100% | **3.73** |
 
 Two things are wrong and they compound:
 
-- **Mix** — 54% of the bucket comes from the 4–10 prior-DPD band vs 17% for the control,
-  and just **1 of 500 loans has a clean prior loan** (vs 12.4%).
-- **Performance within band** — even holding prior DPD fixed, these run 1.4–1.7× worse
-  (5.76 vs 3.35 at 1–3; 8.62 vs 5.97 at 4–10).
+- **Mix** — 53% of the experiment comes from the 4–10 prior-DPD band vs 17% for the control,
+  and just **1 of 610 loans has a clean prior loan** (vs 12.4%).
+- **Performance within band** — even holding prior DPD fixed, these run 1.4–1.8× worse
+  (6.22 vs 3.37 at 1–3; 8.35 vs 5.99 at 4–10).
 
 So this **cannot** be written off as "we knowingly took 4–10 DPD borrowers and priced for
 it". Something beyond prior DPD is being given up when this policy is overruled. The
@@ -400,9 +406,9 @@ it". Something beyond prior DPD is being given up when this policy is overruled.
 
 ### 6.5 Lender split inside the 500 — it's the policy, not a lender
 
-`Q8`. Volume is concentrated: **VIVRITI 203 loans (40.6%)** and **Western Capital 158
-(31.6%)** are 72.2% of the bucket. Loss is not — their loss share is 73.1%, i.e. exactly
-proportional to volume.
+`Q8`. Volume is concentrated: **VIVRITI 231 loans (37.9%)** and **Western Capital 206
+(33.8%)** are 71.6% of the experiment. Loss is not — their loss share is 73.6%, i.e.
+roughly proportional to volume.
 
 Each lender is measured **against itself**: the same lender's Renewal loans, same window,
 that went through any *other* experiment. That separates "risky lender" from "this policy
@@ -410,22 +416,22 @@ is bad at this lender".
 
 | Lender | Loans | % of 500 | ECL % | Control loans | Control ECL % | Lift pp |
 |---|---|---|---|---|---|---|
-| VIVRITI | 203 | 40.6 | 7.27 | 1,313 | 3.06 | **+4.21** |
-| Western Capital | 158 | 31.6 | 7.53 | 537 | 5.40 | +2.13 |
-| SMICC | 44 | 8.8 | 6.17 | 756 | 2.85 | +3.32 |
-| CAPRION | 28 | 5.6 | 8.14 | 630 | 5.80 | +2.35 |
-| JUPITER | 26 | 5.2 | 8.42 | 493 | 3.40 | **+5.02** |
-| SLICE | 23 | 4.6 | 5.51 | 832 | 2.96 | +2.55 |
-| CASHTREE | 17 | 3.4 | 9.67 | 143 | 5.98 | +3.69 |
+| VIVRITI | 231 | 37.9 | 7.29 | 1,543 | 3.02 | **+4.27** |
+| Western Capital | 206 | 33.8 | 7.81 | 772 | 5.30 | +2.51 |
+| SMICC | 55 | 9.0 | 6.31 | 965 | 2.91 | +3.39 |
+| CAPRION | 29 | 4.8 | 8.05 | 772 | 5.62 | +2.43 |
+| JUPITER | 32 | 5.2 | 7.06 | 622 | 3.41 | **+3.65** |
+| SLICE | 28 | 4.6 | 6.09 | 1,089 | 2.90 | +3.19 |
+| CASHTREE | 28 | 4.6 | 8.80 | 189 | 5.79 | +3.01 |
 | NIYOGIN_APOLLO | 1 | 0.2 | 0.34 | 11 | 3.61 | −3.27 *(1 loan, ignore)* |
-| **All** | **500** | **100** | **7.35** | **4,810** | **3.75** | **+3.60** |
+| **All** | **610** | **100** | **7.39** | **6,094** | **3.73** | **+3.66** |
 
-**Every lender is worse inside the experiment**, by +2.13 to +5.02 pp. Lenders do carry
-different baseline risk (SMICC 2.85% vs CASHTREE 5.98% on their other Renewal loans), and
+**Every lender is worse inside the experiment**, by +2.43 to +4.27 pp. Lenders do carry
+different baseline risk (SLICE 2.90% vs CASHTREE 5.79% on their other Renewal loans), and
 the experiment adds loss on top of *all* of them.
 
 Measured as excess against the bucket's own 7.35%, the largest single-lender contribution
-is **₹0.009 Cr** — noise. **No lender is dragging this bucket**, and routing away from one
+is **₹0.017 Cr** — noise. **No lender is dragging this bucket**, and routing away from one
 would not fix it: the policy produces the same bad book wherever it is sent. This is
 consistent with §6.4 — broad-based, not concentrated.
 
@@ -444,10 +450,10 @@ Two exact cuts of the same +1.1100 pp. Both sum with no residual and no assumpti
 
 | Component | pp | Share |
 |---|---|---|
-| Same lenders got worse — *rate* | **+0.5365** | 48.3% |
-| Lenders entering / leaving | **+0.5041** | 45.4% |
-| Reshuffle among established lenders — *mix* | **+0.0693** | 6.2% |
-| **Total** | **+1.1100** | 100% |
+| Same lenders got worse — *rate* | **+0.5280** | 47.9% |
+| Lenders entering / leaving | **+0.5039** | 45.8% |
+| Reshuffle among established lenders — *mix* | **+0.0693** | 6.3% |
+| **Total** | **+1.1012** | 100% |
 
 ```text
 rate effect = SUM over continuing lenders of  w_jun x (r_jul - r_jun)
@@ -463,13 +469,13 @@ disbursal. The 1% cut is not arbitrary — June's lenders fall either side of it
 June and 523 in July, so it is classed as an **entrant**, not a continuing relationship.
 
 **The cut barely moves the headline.** Class CAPRION as continuing instead and rate is
-+0.5378 vs +0.5365 — "the same lenders got worse" holds either way. What moves is where
++0.5293 vs +0.5280 — "the same lenders got worse" holds either way. What moves is where
 CAPRION's ₹9.79 Cr of July volume books:
 
 | | rate | mix | entry/exit |
 |---|---|---|---|
-| CAPRION as **entrant** (published) | +0.5365 | +0.0693 | **+0.5041** |
-| CAPRION as continuing | +0.5378 | +0.4100 | +0.1622 |
+| CAPRION as **entrant** (published) | +0.5280 | +0.0693 | **+0.5039** |
+| CAPRION as continuing | +0.5293 | +0.4100 | +0.1622 |
 
 Same total, same conclusion about the established lenders.
 
@@ -483,13 +489,13 @@ lenders, `r` = that lender's ECL% that month):
 
 | Lender | w_jun | r_jun | r_jul | change | contribution |
 |---|---|---|---|---|---|
-| VIVRITI | 0.36752 | 3.097 | 3.703 | +0.605 | **+0.2224** |
-| SLICE | 0.25653 | 2.589 | 3.192 | +0.602 | **+0.1545** |
-| SMICC | 0.20881 | 2.941 | 3.108 | +0.167 | +0.0349 |
-| JUPITER | 0.11435 | 3.316 | 3.631 | +0.315 | +0.0360 |
-| CASHTREE | 0.03566 | 3.763 | 6.413 | +2.650 | +0.0945 |
+| VIVRITI | 0.36751 | 3.101 | 3.703 | +0.602 | **+0.2212** |
+| SLICE | 0.25653 | 2.593 | 3.192 | +0.599 | **+0.1537** |
+| SMICC | 0.20881 | 2.978 | 3.108 | +0.130 | +0.0271 |
+| JUPITER | 0.11434 | 3.306 | 3.631 | +0.325 | +0.0372 |
+| CASHTREE | 0.03567 | 3.763 | 6.413 | +2.650 | +0.0945 |
 | LENDBOX | 0.01713 | 2.760 | 2.423 | −0.336 | −0.0058 |
-| **Rate effect** | | | | | **+0.5365** |
+| **Rate effect** | | | | | **+0.5280** |
 
 Five of six got worse. VIVRITI and SLICE supply two-thirds of it, both moving ~+0.60 pp on
 large books. CASHTREE moved furthest (+2.65 pp) but is too small to contribute much.
@@ -513,21 +519,21 @@ among established lenders is not part of the story.
 
 ```text
 The six continuing lenders, as a block:
-  their own blended rate     June 2.9775%  ->  July 3.5834%   = +0.6058 pp
-  and  +0.6058 = rate +0.5365 + mix +0.0693      <- the two tables above
+  their own blended rate     June 2.9862%  ->  July 3.5835%   = +0.5973 pp
+  and  +0.5973 = rate +0.5280 + mix +0.0693      <- the two tables above
 
   their share of the book    June  97.20%  ->  July  78.48%
   entrants took 21.52% of July at 6.232%  (CAPRION, Western Capital, NIYOGIN_APOLLO)
   NIYOGIN held   2.80% of June at 5.261%  and left
 
-  June total = 0.9720 x 2.9775 + 0.0280 x 5.2612 = 3.0434%
-  July total = 0.7848 x 3.5834 + 0.2152 x 6.2324 = 4.1534%
-  TOTAL MOVE                                     = +1.1100 pp
+  June total = 0.9720 x 2.9862 + 0.0280 x 5.2612 = 3.0521%
+  July total = 0.7848 x 3.5835 + 0.2152 x 6.2320 = 4.1533%
+  TOTAL MOVE                                     = +1.1012 pp
 
-ENTRY/EXIT = total move - the block's own change = 1.1100 - 0.6058 = +0.5041 pp
+ENTRY/EXIT = total move - the block's own change = 1.1012 - 0.5973 = +0.5039 pp
 ```
 
-The +0.5041 is **dilution**: the continuing block's rate rose only 0.61 pp, but it shrank
+The +0.5039 is **dilution**: the continuing block's rate rose only 0.60 pp, but it shrank
 from 97.2% to 78.5% of the book, and what replaced it ran at **6.23% against the block's
 3.58%**. Nearly a fifth of July's Renewal lending came from lenders barely present in June,
 at almost double the rate of those who were.
@@ -539,19 +545,19 @@ drifts ~0.002 pp.)*
 
 | Component | pp | Share |
 |---|---|---|
-| OVERRULE-B experiment growing its excess | **+0.0668** | 6.0% |
-| Everything else | +1.0432 | 94.0% |
+| OVERRULE-B experiment growing its excess | **+0.0658** | 6.0% |
+| Everything else | +1.0354 | 94.0% |
 
-**Deriving the +0.0668 from rupees** (this is where `0.09491 × 3.508 − 0.08201 × 3.245` comes from):
+**Deriving the +0.0658 from rupees** (this is where `0.09491 × 3.508 − 0.08201 × 3.257` comes from):
 
 | | Disbursed ₹ | ECL ₹ | ECL % |
 |---|---|---|---|
-| June — OVERRULE-B | 48,846,424 | 2,941,664 | 6.022 |
-| June — rest of Renewal | 546,802,537 | 15,186,323 | 2.777 |
-| **June — all Renewal** | **595,648,961** | **18,127,987** | **3.0434** |
+| June — OVERRULE-B | 48,846,424 | 2,951,379 | 6.042 |
+| June — rest of Renewal | 546,802,537 | 15,227,911 | 2.785 |
+| **June — all Renewal** | **595,648,961** | **18,179,290** | **3.0521** |
 | July — OVERRULE-B | 79,687,795 | 5,839,617 | 7.328 |
-| July — rest of Renewal | 759,938,664 | 29,033,280 | 3.820 |
-| **July — all Renewal** | **839,626,459** | **34,872,898** | **4.1534** |
+| July — rest of Renewal | 759,938,664 | 29,032,474 | 3.820 |
+| **July — all Renewal** | **839,626,459** | **34,872,091** | **4.1533** |
 
 ```text
 share = OVERRULE-B disbursed / all Renewal disbursed
@@ -559,17 +565,17 @@ share = OVERRULE-B disbursed / all Renewal disbursed
   July:  79,687,795 / 839,626,459 = 0.09491
 
 lift  = OVERRULE-B ECL% - rest-of-Renewal ECL%
-  June:  6.022 - 2.777 = 3.245
+  June:  6.042 - 2.785 = 3.257
   July:  7.328 - 3.820 = 3.508
 
 contribution = share x lift
-  June:  0.08201 x 3.245 = 0.2661 pp
+  June:  0.08201 x 3.257 = 0.2671 pp
   July:  0.09491 x 3.508 = 0.3329 pp
-  CHANGE = +0.0668 pp  ->  6.0% of +1.1100
+  CHANGE = +0.0658 pp  ->  6.0% of +1.1012
 ```
 
-Identity check: `0.08201 x 6.022 + 0.91799 x 2.777 = 3.0434%` and
-`0.09491 x 7.328 + 0.90509 x 3.820 = 4.1534%` — both match the measured monthly rates exactly.
+Identity check: `0.08201 x 6.042 + 0.91799 x 2.785 = 3.0521%` and
+`0.09491 x 7.328 + 0.90509 x 3.820 = 4.1533%` — both match the measured monthly rates exactly.
 
 **The OVERRULE-B experiment is a slow burn, not a July event.** Its share of Renewal fell through 2026 to a
 7.1% low in June and rose to 8.7% in July — but it ran 13–16% through most of 2025, so July
@@ -578,11 +584,11 @@ month of 2026:
 
 | Month | OVERRULE-B loans | Share of Renewal | OVERRULE-B ECL % | Rest ECL % | Lift pp | Contribution pp |
 |---|---|---|---|---|---|---|
-| Apr 2026 | 273 | 9.3% | 5.48 | 3.43 | +2.04 | 0.201 |
+| Apr 2026 | 273 | 9.3% | 5.48 | 3.43 | +2.05 | 0.201 |
 | May 2026 | 231 | 7.7% | 6.32 | 3.58 | +2.74 | 0.223 |
-| Jun 2026 | 224 | 7.1% | 6.02 | 2.78 | +3.24 | 0.266 |
+| Jun 2026 | 224 | 7.1% | 6.04 | 2.78 | +3.26 | 0.267 |
 | Jul 2026 | 365 | 8.7% | 7.33 | 3.82 | **+3.51** | 0.333 |
-| Aug 2026* | 135 | 11.9% | 7.42 | 3.46 | **+3.96** | 0.450 |
+| Aug 2026* | 245 | 9.7% | 7.50 | 3.58 | **+3.92** | 0.367 |
 
 *(Apr 2026 onward, as requested. `Q9` returns the full series back to Apr 2025, where the
 experiment ran 13–16% of Renewal through most of 2025 — which is why July's 8.7% is not a
@@ -597,29 +603,29 @@ column only loosely (trap 6). Full series in `Q9`.
 
 | Lender | Jun loans | Jun ECL % | Jul loans | Jul ECL % | % of Jul book |
 |---|---|---|---|---|---|
-| **CAPRION** | 18 | 5.59 | **499** | **6.20** | 12.2% |
-| **Western Capital** | **0** | — | **296** | **5.77** | 8.5% |
-| VIVRITI | 940 | 2.55 | 1,078 | 3.07 | 27.8% |
-| SLICE | 692 | 2.51 | 644 | 3.15 | 18.4% |
-| SMICC | 624 | 2.82 | 628 | 2.93 | 15.6% |
-| JUPITER | 342 | 3.34 | 435 | 3.41 | 12.8% |
-| CASHTREE | 122 | 3.50 | 143 | 5.98 | 3.7% |
+| **CAPRION** | 18 | 5.59 | **523** | **6.34** | 12.9% |
+| **Western Capital** | **0** | — | **371** | **6.12** | 10.8% |
+| VIVRITI | 1,076 | 3.10 | 1,246 | 3.70 | 32.7% |
+| SLICE | 715 | 2.59 | 662 | 3.19 | 19.0% |
+| SMICC | 657 | 2.98 | 667 | 3.11 | 16.6% |
+| JUPITER | 355 | 3.31 | 459 | 3.63 | 13.4% |
+| CASHTREE | 125 | 3.76 | 160 | 6.41 | 4.2% |
 | LENDBOX | 117 | 2.76 | 83 | 2.42 | 0.9% |
-| **NIYOGIN** *(exited)* | 59 | 4.38 | **0** | — | 0.0% |
+| **NIYOGIN** *(exited)* | 75 | 5.26 | **0** | — | 0.0% |
 
-- **CAPRION**: 18 → 499 Renewal loans, a 28× jump, at 6.20%.
-- **Western Capital**: **zero** Renewal loans in June, 296 in July at 5.77% plus 75 inside the
+- **CAPRION**: 18 → 523 Renewal loans, a 29× jump, at 6.34%.
+- **Western Capital**: **zero** Renewal loans in June, 371 in July at 6.12% plus 75 inside the
   overrule bucket. A brand-new counterparty, not an expansion — which also means its Q8
   "control" baseline (§6.5) is its own first six weeks, so read that lift cautiously.
 - **NIYOGIN**: 12 months in the experiment, stopped entirely after June. `NIYOGIN_APOLLO`
   appears in Aug with 1 loan — likely a re-onboarding, **worth confirming**.
 
-Newcomers wrote **20.8% of July's Renewal outside the experiment disbursal at 6.01% ECL, vs 3.24% for
-lenders already there**.
+Newcomers wrote **21.5% of July's Renewal disbursal at 6.23% ECL, vs 3.58% for lenders
+already there**.
 
-**Still unexplained: the +0.5378 rate effect — the largest single component.** Every
+**Still unexplained: the +0.5280 rate effect — the largest single component.** Every
 continuing lender got worse in the same month: VIVRITI 3.10→3.70, SLICE 2.59→3.19, SMICC
-2.94→3.11, JUPITER 3.32→3.63, CASHTREE 3.76→6.41. A simultaneous rise across unrelated
+2.94→3.11, JUPITER 3.31→3.63, CASHTREE 3.76→6.41. A simultaneous rise across unrelated
 counterparties is neither a lender problem nor an experiment problem — it points upstream of
 both (scoring, policy, or the applicant population itself). **Start here.**
 
@@ -710,7 +716,7 @@ Analytically open:
    across unrelated counterparties points upstream — a scoring, policy or population change
    that hit everyone at once. Start there.
 5. **Why do these loans underperform _within_ prior-DPD band?** (§6.4) Prior DPD does not
-   explain the 1.4–1.7× gap. What else does the overruled policy screen on?
+   explain the 1.4–1.8× gap. What else does the overruled policy screen on?
 5b. **Confirm the NIYOGIN → NIYOGIN_APOLLO relationship** (§6.6). If it is a re-onboarding
    of the same counterparty, NIYOGIN's exit is not a true exit and the July lender
    attribution shifts slightly.
@@ -725,6 +731,26 @@ Housekeeping:
 
 ### Standing caveats on everything above
 
-- **August is 10 days** (3,842 loans), not a month. Directional only.
-- All ECL is one snapshot, **BOM 2026-09-01**. Re-running later moves every number.
+- **Window extended 10 Aug → 20 Aug on 2026-09-21**, adding 5,034 loans (+28.7%). All
+  figures in this file are the extended window unless stated.
+- **August is 20 days** (8,876 loans), not a month. **Aug 21–31 is excluded deliberately** —
+  those 6,117 loans carry ECL of exactly 0.0% in the current snapshot (trap 7).
+- **Extending the window did not add maturity.** ECL is struck at the BOM, still
+  2026-09-01, so the added loans were 12–21 days old when measured — not ~30 (trap 6).
+- All ECL is one snapshot, **BOM 2026-09-01**. Re-running later moves every number (trap 0).
 - Cohort ordering is a modelling choice (§3).
+
+### What the extension changed
+
+| | to 10 Aug | to 20 Aug |
+|---|---|---|
+| Loans | 17,512 | **22,546** |
+| Disbursed | ₹255.74 Cr | **₹329.29 Cr** |
+| Blended ECL | 4.44% | **4.47%** |
+| Fresh | 4.89% — above 2 of 6 | **5.04% — above 4 of 6** |
+| Renewal | 4.10% — above all 6 | **4.08% — above all 6** |
+| Dormant | 4.32% — above 5 of 6 | **4.26% — above 5 of 6** |
+| OVERRULE-B experiment | 500 loans, 7.35% | **610 loans, 7.39%** |
+
+Every conclusion survives. The one material move is **Fresh**, which went from "highest but
+normal" to "highest and now above four of its six prior months" — worth watching.
