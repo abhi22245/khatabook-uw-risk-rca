@@ -107,6 +107,6 @@ LEFT JOIN policy p
 LEFT JOIN app ap ON loc.LOAN_APPLICATION_ID = ap.id
 LEFT JOIN ecl e  ON loc.LOAN_ID = e.LOAN_ID
 GROUP BY 1, 2, 3
-HAVING COUNT(*) >= 50          -- MIN_LOANS: see ORDERING note in the header
+HAVING COUNT(*) >= 200         -- MIN_LOANS: see ORDERING note in the header
 ORDER BY ecl_pct DESC, loan_count DESC
 LIMIT 10
