@@ -1,7 +1,7 @@
 # UW Risk RCA — Jul–Aug 2026 cohort deterioration
 
 **Status:** live investigation · **Branch:** `abhi_rca` · **Last updated:** 2026-09-21
-**Artifact (findings dashboard):** https://claude.ai/code/artifact/07e5d5ba-77a7-478a-ae8e-9f198451dbe8
+**Artifact (findings dashboard):** https://claude.ai/artifact/1yZkaeiaCFfHZhhTBdszTq
 
 > **If you are a new session picking this up cold: read [§1](#1-what-we-are-doing),
 > [§2](#2-how-to-run-a-query) and [§5](#5-traps-that-will-silently-corrupt-your-numbers)
